@@ -42,11 +42,11 @@ private:
     QGridLayout *layout = new QGridLayout;
 
     Button *btn0 = new Button(this, "Temperatures");
-    Button *btn1 = new Button(this, "1");
-    Button *btn2 = new Button(this, "2");
-    Button *btn3 = new Button(this, "3");
-    Button *btn4 = new Button(this, "4");
-    Button *btn5 = new Button(this, "5");
+    Button *btn1 = new Button(this, "Status");
+    Button *btn2 = new Button(this, "Stats");
+    Button *btn3 = new Button(this, "Serial Log");
+    Button *btn4 = new Button(this, "Errors");
+    Button *btn5 = new Button(this, "Motor Power\nOn");
 
     QPropertyAnimation *motEffMen = new QPropertyAnimation(this, "pos"); // motion effect for menu
     QPropertyAnimation *motEffSel = new QPropertyAnimation(selector, "pos"); // motion effect for selector

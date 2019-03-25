@@ -20,8 +20,10 @@ public:
 public slots:
     void toggleEntry();
 
-private:
+protected:
     QGridLayout *entryLayout = new QGridLayout;
+
+private:
     QPixmap *entryBg = new QPixmap;
     QLabel *canvas = new QLabel(this);
     QPropertyAnimation *motEffEntry = new QPropertyAnimation(this, "pos");

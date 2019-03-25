@@ -1,5 +1,7 @@
 #include "entry.h"
 
+#include <QGraphicsBlurEffect>
+
 extern short int SCR_WIDTH;
 extern short int SCR_HEIGHT;
 
@@ -22,8 +24,10 @@ Entry::Entry(MainWindow *parent)
     canvas->setPixmap(entryBg->scaled(canvas->size(),
                                       Qt::IgnoreAspectRatio,
                                       Qt::SmoothTransformation));
+    canvas->setGraphicsEffect(new QGraphicsBlurEffect());
     entryLayout->addWidget(canvas,0,0);
     entryLayout->setContentsMargins(0,0,0,0);
+    entryLayout->setSpacing(0);
     this->hide();
 
     connect(motEffEntry, &QPropertyAnimation::finished, this, &Entry::hideEntry);
@@ -37,8 +41,9 @@ void Entry::toggleEntry()
         motEffEntry->setStartValue(QPoint(SCR_WIDTH,0));
         motEffEntry->setEndValue(QPoint(SCR_WIDTH/4,0));
         motEffEntry->start();
-        this->show();
+        this->raise();
         entryOpen = true;
+        this->show();
     }
     else
     {

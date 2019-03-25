@@ -1,11 +1,12 @@
 #include "mainwindow.h"
 
 #include "entry.h"
+#include <QMouseEvent>
+#include <QGraphicsOpacityEffect>
 
 MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent)
 {
     entries = new Entry*[menu->buttonCount()];
-    entries[0] = testEntry;
 
     this->setFixedSize(SCR_WIDTH,SCR_HEIGHT);
     this->setWindowFlags(Qt::FramelessWindowHint);
@@ -24,22 +25,43 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent)
                                      SCR_HEIGHT,
                                      Qt::KeepAspectRatioByExpanding));
 
-    bgLayout->addLayout(fgLayout,1,1,3,3, Qt::AlignLeft|Qt::AlignTop);
     bgLayout->addWidget(meter,1,1,1,3, Qt::AlignVCenter);
+    //bgLayout->addLayout(fgLayout,1,1,3,3, Qt::AlignLeft|Qt::AlignTop);
+    bgLayout->addWidget(fgFrame,1,1,3,3, Qt::AlignLeft|Qt::AlignTop);
+    fgFrame->setLayout(fgLayout);
+    fgFrame->setFixedSize(this->size());
+    fgFrame->setGraphicsEffect(opaEff);
+    opaEff->setOpacity(0.98);
 
     fgLayout->setHorizontalSpacing(0);
     fgLayout->setContentsMargins(0,0,0,0);
-    fgLayout->setGeometry(bgLayout->geometry());
     fgLayout->addWidget(menu,1,1,3,1,Qt::AlignLeft|Qt::AlignTop);
+    fgLayout->addWidget(entryTemp,1,2,3,3, Qt::AlignRight|Qt::AlignTop);
+    fgLayout->addWidget(entryMotor,1,2,3,3, Qt::AlignRight|Qt::AlignTop);
+    fgLayout->addWidget(entryStats,1,2,3,3, Qt::AlignRight|Qt::AlignTop);
+    fgLayout->addWidget(entryErrors,1,2,3,3, Qt::AlignRight|Qt::AlignTop);
+    fgLayout->addWidget(entryStatus,1,2,3,3, Qt::AlignRight|Qt::AlignTop);
+    fgLayout->addWidget(entrySerialLog,1,2,3,3, Qt::AlignRight|Qt::AlignTop);
 
-    fgLayout->addWidget(testEntry,1,2,3,3, Qt::AlignRight|Qt::AlignTop);
+    entries[0] = entryTemp;
+    entries[1] = entryStatus;
+    entries[2] = entryStats;
+    entries[3] = entrySerialLog;
+    entries[4] = entryErrors;
+    entries[5] = entryMotor;
+
+    QSizePolicy temp = menu->sizePolicy();
+    temp.setRetainSizeWhenHidden(true);
+    menu->setSizePolicy(temp);
+
     meter->show();
-    testEntry->show();
+    //testEntry->show();
     //menu->show();
 
-    connect(this, &MainWindow::lPressEvent, menu, &Menu::openMenu);
-    connect(this, &MainWindow::lReleaseEvent, menu, &Menu::closeMenu);
-    connect(this, &MainWindow::rPressEvent, this, &MainWindow::toggleEntry);
+    connect(this, &MainWindow::lPressEvent1, menu, &Menu::openMenu);
+    connect(this, &MainWindow::lPressEvent2, menu, &Menu::closeMenu);
+    connect(this, &MainWindow::rPressEvent, menu, &Menu::toggleSelector);
+    connect(this, &MainWindow::kPressEvent, this, &MainWindow::toggleEntry);
 }
 
 MainWindow::~MainWindow()
@@ -48,12 +70,19 @@ MainWindow::~MainWindow()
 
 void MainWindow::mouseReleaseEvent(QMouseEvent *mouseEvent1)
 {
-    static bool asd = false;
-    if(asd)
-        this->lReleaseEvent();
+    if(mouseEvent1->button() == Qt::LeftButton)
+    {
+        static bool asd = false;
+        if(asd)
+            this->lPressEvent2();
+        else
+            this->lPressEvent1();
+        asd = !asd;
+    }
     else
-        this->lPressEvent();
-    asd = !asd;
+    {
+        this->rPressEvent();
+    }
 }
 
 void MainWindow::mousePressEvent(QMouseEvent *mouseEvent2)
@@ -62,19 +91,18 @@ void MainWindow::mousePressEvent(QMouseEvent *mouseEvent2)
 
 void MainWindow::keyPressEvent(QKeyEvent *keyEvent)
 {
-    this->rPressEvent();
+    this->kPressEvent();
 }
 void MainWindow::toggleEntry()
 {
-    int selPos = menu->selectorPosition();
-
     if(menu->isVisible())
     {
+        int selPos = menu->selectorPosition();
         if(closingEntry != nullptr)
         {
             if(closingEntry->isClosing())
                 return;
-            else if(entryOpen && closingEntry)
+            else
             {
                 closingEntry->toggleEntry();
 
@@ -89,7 +117,6 @@ void MainWindow::toggleEntry()
         entries[selPos]->toggleEntry();
         closingEntry = entries[selPos];
     }
-    //entries[menu->selectorPosition()]->toggleEntry();
 }
 
 void MainWindow::toggleMotorEntry()

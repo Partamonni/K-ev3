@@ -182,6 +182,7 @@ void Serial::display(const QString &displayData)
 
     default: // HOX! Add limit
         data.append("'C");
+        m_parent->entryTemp->setTemp(dataEntry, data);
         //m_parent->tempEntry->packTemp[entry]->setText(data);
         break;
     }

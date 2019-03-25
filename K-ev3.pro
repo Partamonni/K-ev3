@@ -34,7 +34,13 @@ SOURCES += \
     button.cpp \
     serial.cpp \
     pushbuttons.cpp \
-    entry.cpp
+    entry.cpp \
+    entrytemp.cpp \
+    entryerrors.cpp \
+    entrystats.cpp \
+    entrystatus.cpp \
+    entryseriallog.cpp \
+    entrymotor.cpp
 
 HEADERS += \
         mainwindow.h \
@@ -43,7 +49,13 @@ HEADERS += \
     button.h \
     serial.h \
     pushbuttons.h \
-    entry.h
+    entry.h \
+    entrytemp.h \
+    entryerrors.h \
+    entrystats.h \
+    entrystatus.h \
+    entryseriallog.h \
+    entrymotor.h
 
 # Default rules for deployment.
 qnx: target.path = /tmp/$${TARGET}/bin

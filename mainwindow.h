@@ -15,6 +15,12 @@
 #include "serial.h"
 #include "pushbuttons.h"
 #include "entry.h"
+#include "entryerrors.h"
+#include "entrymotor.h"
+#include "entryseriallog.h"
+#include "entrystats.h"
+#include "entrystatus.h"
+#include "entrytemp.h"
 
 extern int SCR_WIDTH;
 extern int SCR_HEIGHT;
@@ -34,9 +40,10 @@ public slots:
     void toggleMotorEntry();
 
 signals:
-    void lPressEvent();
-    void lReleaseEvent();
+    void lPressEvent1();
+    void lPressEvent2();
     void rPressEvent();
+    void kPressEvent();
 
 #if !RPI
 protected:
@@ -54,7 +61,9 @@ private:
     QLabel *bgLabel = new QLabel;
     QPixmap *bgImg = new QPixmap;
 
+    QLabel *fgFrame = new QLabel;
     QGridLayout *fgLayout = new QGridLayout;
+    QGraphicsOpacityEffect *opaEff = new QGraphicsOpacityEffect;
 
     Meterbar *meter = new Meterbar;
     Menu *menu = new Menu;
@@ -62,7 +71,13 @@ private:
 
     Entry **entries = nullptr;
     Entry *closingEntry = nullptr;
-    Entry *testEntry = new Entry(this);
+    EntryTemp *entryTemp = new EntryTemp(this);
+    EntryStatus *entryStatus= new EntryStatus(this);
+    EntryStats *entryStats= new EntryStats(this);
+    EntrySerialLog *entrySerialLog = new EntrySerialLog(this);
+    EntryErrors *entryErrors = new EntryErrors(this);
+    EntryMotor *entryMotor= new EntryMotor(this);
+
     //PushButtons *pushButtons = new PushButtons(this);
 
     friend class PushButtons;
