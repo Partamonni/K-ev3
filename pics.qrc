@@ -1,0 +1,8 @@
+<RCC>
+    <qresource prefix="/">
+        <file alias="btn">button.png</file>
+        <file alias="btnsel">buttonselect.png</file>
+        <file alias="entrybg">entry.png</file>
+        <file alias="mainbg">K-EV_rev4.png</file>
+    </qresource>
+</RCC>
