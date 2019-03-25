@@ -66,9 +66,28 @@ void MainWindow::keyPressEvent(QKeyEvent *keyEvent)
 }
 void MainWindow::toggleEntry()
 {
+    int selPos = menu->selectorPosition();
+
     if(menu->isVisible())
     {
-        if(closingEntry != nullptr &&)
+        if(closingEntry != nullptr)
+        {
+            if(closingEntry->isClosing())
+                return;
+            else if(entryOpen && closingEntry)
+            {
+                closingEntry->toggleEntry();
+
+                if(closingEntry == entries[selPos])
+                {
+                    closingEntry = nullptr;
+                    return;
+                }
+            }
+        }
+
+        entries[selPos]->toggleEntry();
+        closingEntry = entries[selPos];
     }
     //entries[menu->selectorPosition()]->toggleEntry();
 }

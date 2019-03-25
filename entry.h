@@ -15,6 +15,7 @@ class Entry : public QWidget
     Q_OBJECT
 public:
     Entry(MainWindow *parent = nullptr);
+    bool isClosing();
 
 public slots:
     void toggleEntry();

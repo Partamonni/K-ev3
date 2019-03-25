@@ -58,3 +58,11 @@ void Entry::hideEntry()
     if(!entryOpen)
         this->hide();
 }
+
+bool Entry::isClosing()
+{
+    if(motEffEntry->state() == QPropertyAnimation::Running)
+        return true;
+    else
+        return false;
+}

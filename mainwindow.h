@@ -46,6 +46,9 @@ protected:
 #endif
 private:
 
+    void (Entry::*toggleEntryFunc)() = nullptr;
+    bool entryOpen = false;
+
     QWidget *center = new QWidget;
     QGridLayout *bgLayout = new QGridLayout;
     QLabel *bgLabel = new QLabel;
@@ -61,8 +64,6 @@ private:
     Entry *closingEntry = nullptr;
     Entry *testEntry = new Entry(this);
     //PushButtons *pushButtons = new PushButtons(this);
-
-    void (Entry::*lastEntryFunc)() = nullptr;
 
     friend class PushButtons;
     friend class Serial;
