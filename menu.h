@@ -10,7 +10,7 @@
 
 class MainWindow;
 
-class Menu : public QWidget
+class Menu : public QLabel
 {
     Q_OBJECT
 
@@ -39,7 +39,10 @@ private:
 
     QLabel *selector = new QLabel;
     QPixmap *selectorImg = new QPixmap;
+    QPixmap *menuRender;
     QGridLayout *layout = new QGridLayout;
+    QGridLayout *bgLayout = new QGridLayout;
+    QWidget *menuFrame = new QWidget;
 
     Button *btn0 = new Button(this, "Temperatures");
     Button *btn1 = new Button(this, "Status");

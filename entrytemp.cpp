@@ -16,7 +16,7 @@ EntryTemp::EntryTemp(MainWindow *parent)
         packTemp[i]->setStyleSheet("QLabel {background-color: rgba(0,0,0,80); color: white;}");
     }
 
-    entryLayout->addLayout(grid,0,0);
+    //entryLayout->addLayout(grid,0,0);
     grid->setContentsMargins(15,20,15,20);
 
     int rows;

@@ -10,7 +10,7 @@
 
 class MainWindow;
 
-class Entry : public QWidget
+class Entry : public QLabel
 {
     Q_OBJECT
 public:
@@ -22,10 +22,12 @@ public slots:
 
 protected:
     QGridLayout *entryLayout = new QGridLayout;
+    QGridLayout *bgLayout = new QGridLayout;
+    QPixmap *entryBg = new QPixmap;
+    QPixmap *entryRender;
+    QWidget *entryFrame = new QWidget;
 
 private:
-    QPixmap *entryBg = new QPixmap;
-    QLabel *canvas = new QLabel(this);
     QPropertyAnimation *motEffEntry = new QPropertyAnimation(this, "pos");
 
     int entWidth;

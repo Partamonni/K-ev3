@@ -24,6 +24,8 @@ DEFINES += QT_DEPRECATED_WARNINGS
 
 CONFIG += c++11
 
+QMAKE_CXXFLAGS_WARN_OFF -= -Wunused-parameter
+
 INCLUDEPATH += wiringPi/wiringPi
 
 SOURCES += \

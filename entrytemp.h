@@ -17,7 +17,7 @@ public:
     void setTemp(int position, QString text);
 private:
     QLabel *packTemp[40];
-    QGridLayout *grid = new QGridLayout;
+    QGridLayout *grid = entryLayout;
 };
 
 #endif // ENTRYTEMP_H

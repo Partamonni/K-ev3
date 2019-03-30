@@ -7,8 +7,13 @@
 
 Menu::Menu(MainWindow *parent)
 {
-    this->setLayout(layout);
     this->setFixedSize(SCR_WIDTH/4, SCR_HEIGHT);
+    this->setLayout(bgLayout);
+
+    menuRender = new QPixmap(this->size());
+    bgLayout->setContentsMargins(0,0,0,0);
+    bgLayout->addWidget(menuFrame);
+    menuFrame->setLayout(layout);
 
     selectorImg->load(":/btnsel");
     selector->setPixmap(*selectorImg);
@@ -26,7 +31,7 @@ Menu::Menu(MainWindow *parent)
     motEffSel->setEasingCurve(QEasingCurve::OutQuint);
     motEffSel->setDuration(300);
 
-    this->hide();
+    menuFrame->hide();
     connect(motEffMen, &QPropertyAnimation::finished, this, &Menu::hideMenu);
 }
 
@@ -56,25 +61,31 @@ void Menu::addButton(QPushButton *btn)
 int Menu::buttonCount()
 {return btnCount;}
 
-void Menu::closeMenu()
-{
-    if(menuOpen)
-    {
-        motEffMen->setEndValue(this->pos());
-        motEffMen->setDirection(QPropertyAnimation::Backward);
-        motEffMen->start();
-        menuOpen = false;
-    }
-}
-
 void Menu::openMenu()
 {
     motEffMen->setDirection(QPropertyAnimation::Forward);
     motEffMen->setStartValue(QPoint(0,-this->height()));
     motEffMen->setEndValue(QPoint(0,0));
+    menuFrame->render(menuRender);
+    this->setPixmap(*menuRender);
     motEffMen->start();
     menuOpen = true;
     this->show();
+}
+
+void Menu::closeMenu()
+{
+    if(menuOpen)
+    {
+        menuFrame->render(menuRender);
+        this->setPixmap(*menuRender);
+        motEffMen->setEndValue(this->pos());
+        motEffMen->setDirection(QPropertyAnimation::Backward);
+        menuFrame->hide();
+        motEffMen->start();
+        menuOpen = false;
+        selPos = 0;
+    }
 }
 
 void Menu::hideMenu()
@@ -82,6 +93,11 @@ void Menu::hideMenu()
     if(!menuOpen)
     {
         this->hide();
+        selector->setGeometry(QRect(QPoint(0,0), selector->size()));
+    }
+    else
+    {
+        menuFrame->show();
     }
 }
 
