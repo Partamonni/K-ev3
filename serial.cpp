@@ -180,10 +180,9 @@ void Serial::display(const QString &displayData)
         m_parent->meter->setVolt(data);
         break;
 
-    default: // HOX! Add limit
+    default:
         data.append("'C");
         m_parent->entryTemp->setTemp(dataEntry, data);
-        //m_parent->tempEntry->packTemp[entry]->setText(data);
         break;
     }
 

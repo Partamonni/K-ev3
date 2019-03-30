@@ -18,15 +18,15 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent)
     #endif
 
     center->setLayout(bgLayout);
-    bgLayout->addWidget(bgLabel,1,1,3,3);
     bgLayout->setContentsMargins(0,0,0,0);
+    bgLayout->addWidget(bgLabel,1,1,3,3);
+    bgLayout->addWidget(clock,1,3,(Qt::AlignTop | Qt::AlignRight));
     bgImg->load(":/mainbg");
     bgLabel->setPixmap(bgImg->scaled(SCR_WIDTH,
                                      SCR_HEIGHT,
                                      Qt::KeepAspectRatioByExpanding));
 
     bgLayout->addWidget(meter,1,1,1,3, Qt::AlignVCenter);
-    //bgLayout->addLayout(fgLayout,1,1,3,3, Qt::AlignLeft|Qt::AlignTop);
     bgLayout->addWidget(fgFrame,1,1,3,3, Qt::AlignLeft|Qt::AlignTop);
     fgFrame->setLayout(fgLayout);
     fgFrame->setFixedSize(this->size());

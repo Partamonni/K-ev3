@@ -80,7 +80,7 @@ void Entry::hideEntry()
     else
     {
         this->setPixmap(*entryBg);
-        //entryFrame->show();
+        entryFrame->show();
     }
 }
 

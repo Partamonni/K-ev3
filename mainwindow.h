@@ -21,6 +21,7 @@
 #include "entrystats.h"
 #include "entrystatus.h"
 #include "entrytemp.h"
+#include "clock.h"
 
 extern int SCR_WIDTH;
 extern int SCR_HEIGHT;
@@ -77,6 +78,8 @@ private:
     EntrySerialLog *entrySerialLog = new EntrySerialLog(this);
     EntryErrors *entryErrors = new EntryErrors(this);
     EntryMotor *entryMotor= new EntryMotor(this);
+
+    Clock *clock = new Clock;
 
     //PushButtons *pushButtons = new PushButtons(this);
 

@@ -42,7 +42,8 @@ SOURCES += \
     entrystats.cpp \
     entrystatus.cpp \
     entryseriallog.cpp \
-    entrymotor.cpp
+    entrymotor.cpp \
+    clock.cpp
 
 HEADERS += \
         mainwindow.h \
@@ -57,7 +58,8 @@ HEADERS += \
     entrystats.h \
     entrystatus.h \
     entryseriallog.h \
-    entrymotor.h
+    entrymotor.h \
+    clock.h
 
 # Default rules for deployment.
 qnx: target.path = /tmp/$${TARGET}/bin
