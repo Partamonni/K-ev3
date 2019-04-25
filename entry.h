@@ -7,6 +7,7 @@
 #include <QLabel>
 #include <QPixmap>
 #include <QPropertyAnimation>
+#include <QTimer>
 
 class MainWindow;
 
@@ -26,6 +27,7 @@ protected:
     QPixmap *entryBg = new QPixmap;
     QPixmap *entryRender;
     QWidget *entryFrame = new QWidget;
+    QTimer *timer = new QTimer;
 
 private:
     QPropertyAnimation *motEffEntry = new QPropertyAnimation(this, "pos");

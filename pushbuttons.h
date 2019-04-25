@@ -1,8 +1,8 @@
 #ifndef PUSHBUTTONS_H
 #define PUSHBUTTONS_H
 
-#endif
-#if 0
+
+#if RPI
 
 #include <QObject>
 #include <QThread>
@@ -46,5 +46,6 @@ private:
 private slots:
     void closeMenu();
 };
+#endif
 
 #endif // PUSHBUTTONS_H

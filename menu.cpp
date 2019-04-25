@@ -26,7 +26,7 @@ Menu::Menu(MainWindow *parent)
     layout->addWidget(selector,0,0);
 
     motEffMen->setEasingCurve(QEasingCurve::InOutQuad);
-    motEffMen->setDuration(600);
+    motEffMen->setDuration(500);
 
     motEffSel->setEasingCurve(QEasingCurve::OutQuint);
     motEffSel->setDuration(300);
@@ -85,6 +85,7 @@ void Menu::closeMenu()
         motEffMen->start();
         menuOpen = false;
         selPos = 0;
+        emit menuClosing();
     }
 }
 
@@ -105,4 +106,13 @@ void Menu::hideMenu()
 int Menu::selectorPosition()
 {
     return selPos;
+}
+
+bool Menu::isClosing()
+{
+    if(motEffMen->state() == QPropertyAnimation::Running &&
+            motEffMen->direction() == QPropertyAnimation::Backward)
+        return true;
+    else
+        return false;
 }

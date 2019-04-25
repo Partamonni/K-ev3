@@ -9,6 +9,7 @@ class EntryMotor : public Entry
 {
 public:
     EntryMotor(MainWindow *parent);
+
 };
 
 #endif // ENTRYMOTOR_H

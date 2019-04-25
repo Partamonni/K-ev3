@@ -22,11 +22,10 @@
 #include "entrystatus.h"
 #include "entrytemp.h"
 #include "clock.h"
+#include "notice.h"
 
 extern int SCR_WIDTH;
 extern int SCR_HEIGHT;
-
-#define RPI 0
 
 class MainWindow : public QMainWindow
 {
@@ -38,21 +37,20 @@ public:
 
 public slots:
     void toggleEntry();
-    void toggleMotorEntry();
 
+#if !RPI
 signals:
     void lPressEvent1();
     void lPressEvent2();
     void rPressEvent();
     void kPressEvent();
+#endif
 
+private:
 #if !RPI
-protected:
     void mouseReleaseEvent(QMouseEvent *mouseEvent1);
-    void mousePressEvent(QMouseEvent *mouseEvent2);
     void keyPressEvent(QKeyEvent *keyEvent);
 #endif
-private:
 
     void (Entry::*toggleEntryFunc)() = nullptr;
     bool entryOpen = false;
@@ -80,9 +78,10 @@ private:
     EntryMotor *entryMotor= new EntryMotor(this);
 
     Clock *clock = new Clock;
-
-    //PushButtons *pushButtons = new PushButtons(this);
-
+    Notice *notice = new Notice;
+#if RPI
+    PushButtons *pushButtons = new PushButtons(this);
+#endif
     friend class PushButtons;
     friend class Serial;
 };

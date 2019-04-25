@@ -22,11 +22,15 @@ public:
     int selectorPosition();
     int buttonCount();
     int entryCount();
+    bool isClosing();
 
 public slots:
     void toggleSelector();
     void openMenu();
     void closeMenu();
+
+signals:
+    void menuClosing();
 
 private:
     int selPos = 0;

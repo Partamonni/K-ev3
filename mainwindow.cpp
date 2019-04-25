@@ -27,7 +27,9 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent)
                                      Qt::KeepAspectRatioByExpanding));
 
     bgLayout->addWidget(meter,1,1,1,3, Qt::AlignVCenter);
-    bgLayout->addWidget(fgFrame,1,1,3,3, Qt::AlignLeft|Qt::AlignTop);
+    bgLayout->addWidget(notice,1,1,1,3,(Qt::AlignHCenter | Qt::AlignTop));
+
+    bgLayout->addWidget(fgFrame,1,1,1,3, Qt::AlignLeft|Qt::AlignTop);
     fgFrame->setLayout(fgLayout);
     fgFrame->setFixedSize(this->size());
     fgFrame->setGraphicsEffect(opaEff);
@@ -55,19 +57,21 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent)
     menu->setSizePolicy(temp);
 
     meter->show();
-    //testEntry->show();
-    //menu->show();
-
+    notice->toVisible();
+#if !RPI
     connect(this, &MainWindow::lPressEvent1, menu, &Menu::openMenu);
     connect(this, &MainWindow::lPressEvent2, menu, &Menu::closeMenu);
     connect(this, &MainWindow::rPressEvent, menu, &Menu::toggleSelector);
     connect(this, &MainWindow::kPressEvent, this, &MainWindow::toggleEntry);
+    connect(menu, &Menu::menuClosing, this, &MainWindow::toggleEntry);
+#endif
 }
 
 MainWindow::~MainWindow()
 {
 }
 
+#if !RPI
 void MainWindow::mouseReleaseEvent(QMouseEvent *mouseEvent1)
 {
     if(mouseEvent1->button() == Qt::LeftButton)
@@ -85,14 +89,12 @@ void MainWindow::mouseReleaseEvent(QMouseEvent *mouseEvent1)
     }
 }
 
-void MainWindow::mousePressEvent(QMouseEvent *mouseEvent2)
-{
-}
-
 void MainWindow::keyPressEvent(QKeyEvent *keyEvent)
 {
     this->kPressEvent();
 }
+#endif
+
 void MainWindow::toggleEntry()
 {
     if(menu->isVisible())
@@ -113,11 +115,10 @@ void MainWindow::toggleEntry()
                 }
             }
         }
-
-        entries[selPos]->toggleEntry();
-        closingEntry = entries[selPos];
+        if(!menu->isClosing())
+        {
+            entries[selPos]->toggleEntry();
+            closingEntry = entries[selPos];
+        }
     }
 }
-
-void MainWindow::toggleMotorEntry()
-{}

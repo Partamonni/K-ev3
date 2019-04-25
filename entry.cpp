@@ -28,15 +28,15 @@ Entry::Entry(MainWindow *parent)
                         Qt::SmoothTransformation);
     this->setFixedSize(entWidth, SCR_HEIGHT);
     this->setPixmap(*entryBg);
-    //this->setGraphicsEffect(new QGraphicsBlurEffect());
     entryLayout->setContentsMargins(0,0,0,0);
     entryLayout->setSpacing(0);
     this->hide();
 
     motEffEntry->setEasingCurve(QEasingCurve::InSine);
-    motEffEntry->setDuration(800);
+    motEffEntry->setDuration(500);
 
     connect(motEffEntry, &QPropertyAnimation::finished, this, &Entry::hideEntry);
+    connect(timer, &QTimer::timeout, this, &Entry::hide);
 }
 
 void Entry::toggleEntry()
@@ -50,15 +50,14 @@ void Entry::toggleEntry()
         motEffEntry->setStartValue(QPoint(SCR_WIDTH,0));
         motEffEntry->setEndValue(QPoint(SCR_WIDTH/4,0));
         entryFrame->hide();
-        motEffEntry->start();
-        entryOpen = true;
         this->show();
         this->raise();
+        motEffEntry->start();
+        entryOpen = true;
     }
     else
     {
         this->render(entryRender);
-        entryFrame->hide();
         this->setPixmap(*entryRender);
 
         if(motEffEntry->state() == QPropertyAnimation::Running)
@@ -68,6 +67,7 @@ void Entry::toggleEntry()
         }
 
         motEffEntry->setDirection(QPropertyAnimation::Backward);
+        entryFrame->hide();
         motEffEntry->start();
         entryOpen = false;
     }
@@ -76,7 +76,9 @@ void Entry::toggleEntry()
 void Entry::hideEntry()
 {
     if(!entryOpen)
+    {
         this->hide();
+    }
     else
     {
         this->setPixmap(*entryBg);

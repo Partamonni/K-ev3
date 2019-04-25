@@ -13,7 +13,6 @@
 
 #if RPI
 
-
 PushButtons::PushButtons(MainWindow *parent)
 {
     isrClass = this;
