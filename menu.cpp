@@ -35,11 +35,6 @@ Menu::Menu(MainWindow *parent)
     connect(motEffMen, &QPropertyAnimation::finished, this, &Menu::hideMenu);
 }
 
-Menu::~Menu()
-{
-
-}
-
 void Menu::toggleSelector()
 {
     if(motEffSel->state() == QPropertyAnimation::Running)
@@ -94,6 +89,7 @@ void Menu::hideMenu()
     if(!menuOpen)
     {
         this->hide();
+        emit justClosed();
         selector->setGeometry(QRect(QPoint(0,0), selector->size()));
     }
     else

@@ -7,6 +7,8 @@
 MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent)
 {
     entries = new Entry*[menu->buttonCount()];
+    serial->openSerialPort();
+    entryMotor->setSerial(serial);
 
     this->setFixedSize(SCR_WIDTH,SCR_HEIGHT);
     this->setWindowFlags(Qt::FramelessWindowHint);
@@ -63,12 +65,9 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent)
     connect(this, &MainWindow::lPressEvent2, menu, &Menu::closeMenu);
     connect(this, &MainWindow::rPressEvent, menu, &Menu::toggleSelector);
     connect(this, &MainWindow::kPressEvent, this, &MainWindow::toggleEntry);
-    connect(menu, &Menu::menuClosing, this, &MainWindow::toggleEntry);
 #endif
-}
-
-MainWindow::~MainWindow()
-{
+    connect(menu, &Menu::menuClosing, this, &MainWindow::toggleEntry);
+    connect(menu, &Menu::justClosed, this, &MainWindow::clearClosingEntry);
 }
 
 #if !RPI
@@ -106,11 +105,19 @@ void MainWindow::toggleEntry()
                 return;
             else
             {
-                closingEntry->toggleEntry();
-
-                if(closingEntry == entries[selPos])
+                if(entries[selPos]->hidesPrevious())
                 {
-                    closingEntry = nullptr;
+                    closingEntry->toggleEntry();
+
+                    if(closingEntry == entries[selPos])
+                    {
+                        closingEntry = nullptr;
+                        return;
+                    }
+                }
+                else
+                {
+                    entries[selPos]->toggleEntry();
                     return;
                 }
             }
@@ -121,4 +128,23 @@ void MainWindow::toggleEntry()
             closingEntry = entries[selPos];
         }
     }
+}
+
+void MainWindow::motorShut(bool state)
+{
+    if(state == true)
+    {
+        Notice::showText("Motor power is now off");
+        entryMotor->setText("Power On\nMotor");
+    }
+    else
+    {
+        Notice::showText("Motor power is now on");
+        entryMotor->setText("Power Off\nMotor");
+    }
+}
+
+void MainWindow::clearClosingEntry()
+{
+    closingEntry = nullptr;
 }

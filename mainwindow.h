@@ -33,10 +33,11 @@ class MainWindow : public QMainWindow
 
 public:
     MainWindow(QWidget *parent = nullptr);
-    ~MainWindow();
 
 public slots:
     void toggleEntry();
+    void motorShut(bool state);
+    void clearClosingEntry();
 
 #if !RPI
 signals:
@@ -81,8 +82,8 @@ private:
     Notice *notice = new Notice;
 #if RPI
     PushButtons *pushButtons = new PushButtons(this);
-#endif
     friend class PushButtons;
+#endif
     friend class Serial;
 };
 

@@ -16,8 +16,7 @@ public:
     Serial(MainWindow *parent);
 
 signals:
-    void motorIsShut();
-    void motorIsUp();
+    void motorShut(bool state);
 
 public slots:
     bool openSerialPort();

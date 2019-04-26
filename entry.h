@@ -17,24 +17,28 @@ class Entry : public QLabel
 public:
     Entry(MainWindow *parent = nullptr);
     bool isClosing();
+    bool hidesPrevious();
+
+signals:
 
 public slots:
-    void toggleEntry();
+    virtual void toggleEntry();
 
 protected:
     QGridLayout *entryLayout = new QGridLayout;
     QGridLayout *bgLayout = new QGridLayout;
     QPixmap *entryBg = new QPixmap;
-    QPixmap *entryRender;
+    QPixmap *entryRender = nullptr;
     QWidget *entryFrame = new QWidget;
     QTimer *timer = new QTimer;
+    QPropertyAnimation *motEffEntry = new QPropertyAnimation(this, "pos");
+    MainWindow *m_parent = nullptr;
+
+    bool hidePrevious = true;
 
 private:
-    QPropertyAnimation *motEffEntry = new QPropertyAnimation(this, "pos");
-
     int entWidth;
     bool entryOpen;
-    MainWindow *m_parent;
 
 private slots:
     void hideEntry();

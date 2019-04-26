@@ -1,9 +1,7 @@
 #include "entry.h"
 
 #include <QGraphicsBlurEffect>
-
-extern short int SCR_WIDTH;
-extern short int SCR_HEIGHT;
+#include "mainwindow.h"
 
 Entry::Entry(MainWindow *parent)
 {
@@ -36,7 +34,6 @@ Entry::Entry(MainWindow *parent)
     motEffEntry->setDuration(500);
 
     connect(motEffEntry, &QPropertyAnimation::finished, this, &Entry::hideEntry);
-    connect(timer, &QTimer::timeout, this, &Entry::hide);
 }
 
 void Entry::toggleEntry()
@@ -93,3 +90,5 @@ bool Entry::isClosing()
     else
         return false;
 }
+
+bool Entry::hidesPrevious(){return hidePrevious;}

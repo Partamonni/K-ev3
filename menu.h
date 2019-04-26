@@ -16,7 +16,6 @@ class Menu : public QLabel
 
 public:
     Menu(MainWindow *parent = nullptr);
-    ~Menu();
 
     void addButton(QPushButton *btn);
     int selectorPosition();
@@ -31,13 +30,13 @@ public slots:
 
 signals:
     void menuClosing();
+    void justClosed();
 
 private:
     int selPos = 0;
     int btnCount = 6;
     int btnsInserted = 0;
     int selectorHeight;
-    bool entryOpen = false;
     bool menuOpen = false;
     int holdReleaseTime = 600;
 

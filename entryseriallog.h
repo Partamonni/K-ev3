@@ -11,7 +11,6 @@ class EntrySerialLog : public Entry
     Q_OBJECT
 public:
     EntrySerialLog(MainWindow *parent = nullptr);
-    ~EntrySerialLog();
 
     void addLine(QString line);
 

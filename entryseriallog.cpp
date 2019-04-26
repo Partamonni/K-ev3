@@ -22,31 +22,30 @@ EntrySerialLog::EntrySerialLog(MainWindow *parent)
 
     col0->setMaximumBlockCount(20);
     col1->setMaximumBlockCount(20);
+    col0->setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
+    col1->setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
 
-    col0->insertPlainText("Lorem isum dolores asd rölöm");
+
 }
-
-EntrySerialLog::~EntrySerialLog()
-{}
 
 void EntrySerialLog::addLine(QString line)
 {
     QTextCursor cursor0 = col0->textCursor();
     QTextCursor cursor1 = col1->textCursor();
-    cursor0.setPosition(QTextCursor::Start);
-    cursor1.setPosition(QTextCursor::Start);
+    cursor0.setPosition(QTextCursor::Start-1);
 
-    cursor0.insertText(line);
+    cursor0.insertText(line+"\n");
 
     if(col0->blockCount() == col0->maximumBlockCount())
     {
         cursor0.movePosition(QTextCursor::End);
         cursor0.select(QTextCursor::LineUnderCursor);
+        cursor1.setPosition(QTextCursor::Start-1);
         col1->insertPlainText(cursor0.selectedText());
         cursor0.removeSelectedText();
         cursor0.deletePreviousChar();
 
-        if(col1->blockCount() == col1->maximumBlockCount())
+        if(col1->blockCount() >= col1->maximumBlockCount())
         {
             cursor1.movePosition(QTextCursor::End);
             cursor1.select(QTextCursor::LineUnderCursor);

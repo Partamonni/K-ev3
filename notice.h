@@ -24,7 +24,7 @@ signals:
 
 public slots:
     int addText(QString);
-    void showText(QString);
+    static void showText(QString);
     void clear(int);
     void clearAll();
     void toVisible();
@@ -38,6 +38,7 @@ private:
     QTimer *hideTimer = new QTimer;
     QTimer *releaseTimer = new QTimer;
     QFont *noticeFont = new QFont;
+    static Notice *mainObject;
 
     void initFont();
 

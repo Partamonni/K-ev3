@@ -1,9 +1,12 @@
 #include "notice.h"
 
 
+Notice *Notice::mainObject = nullptr;
+
 Notice::Notice(MainWindow *parent)
 {
     m_parent = parent;
+    mainObject = this;
     initFont();
 
     this->setFixedSize(400,180);
@@ -75,8 +78,8 @@ int Notice::addText(QString addText)
 
 void Notice::showText(QString setText)
 {
-    text->setText(setText);
-    show();
+    Notice::mainObject->setText(setText);
+    Notice::mainObject->show();
 }
 
 void Notice::clear(int deleteId)
