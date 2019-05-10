@@ -16,7 +16,6 @@ EntryTemp::EntryTemp(MainWindow *parent)
         packTemp[i]->setStyleSheet("QLabel {background-color: rgba(0,0,0,80); color: white;}");
     }
 
-    //entryLayout->addLayout(grid,0,0);
     grid->setContentsMargins(15,20,15,20);
 
     int rows;
@@ -41,14 +40,9 @@ EntryTemp::EntryTemp(MainWindow *parent)
         packTemp[i]->setFixedWidth(this->width()/columns-20);
         packTemp[i]->setAlignment(Qt::AlignCenter);
     }
-
-    /*for(int i = 0; i < columns; ++i)
-    {
-        grid->setColumnMinimumWidth(i, SCR_WIDTH/4 / columns);
-    }*/
 }
 
 void EntryTemp::setTemp(int position, QString text)
 {
-
+    packTemp[position]->setText(text);
 }
