@@ -59,7 +59,7 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent)
     menu->setSizePolicy(temp);
 
     meter->show();
-    notice->toVisible();
+    Notice::showText("Boot complete!");
 #if !RPI
     connect(this, &MainWindow::lPressEvent1, menu, &Menu::openMenu);
     connect(this, &MainWindow::lPressEvent2, menu, &Menu::closeMenu);

@@ -1,12 +1,11 @@
 #include "notice.h"
 
 
-Notice *Notice::mainObject = nullptr;
 
 Notice::Notice(MainWindow *parent)
 {
     m_parent = parent;
-    mainObject = this;
+    noticeObject = this;
     initFont();
 
     this->setFixedSize(400,180);
@@ -22,7 +21,7 @@ Notice::Notice(MainWindow *parent)
     opacityAnim->setEndValue(0);
     opacityAnim->setDuration(500);
 
-    text->setText(m_content);
+    //text->setText(m_content);
     text->setFont(*noticeFont);
     text->setStyleSheet("*{color: white;}");
 
@@ -31,13 +30,13 @@ Notice::Notice(MainWindow *parent)
     this->setPixmap(bgImg->scaled(this->size()));
 
     hideTimer->setSingleShot(true);
-    releaseTimer->setSingleShot(true);
+    //releaseTimer->setSingleShot(true);
 
     connect(hideTimer, SIGNAL(timeout()), opacityAnim, SLOT(start()));
-    connect(releaseTimer, SIGNAL(timeout()), this, SLOT(hide()));
+    //connect(releaseTimer, SIGNAL(timeout()), this, SLOT(hide()));
     connect(opacityAnim, SIGNAL(finished()), this, SLOT(hide()));
 
-    show();
+    //show();
 }
 
 void Notice::initFont()
@@ -48,7 +47,7 @@ void Notice::initFont()
     noticeFont->setLetterSpacing(QFont::PercentageSpacing, 110);
     noticeFont->setStretch(75);
 }
-
+/*
 int Notice::addText(QString addText)
 {
     int i = -1;
@@ -74,14 +73,14 @@ int Notice::addText(QString addText)
     text->setText(m_content);
     this->show();
     return freeId;
-}
+}*/
 
-void Notice::showText(QString setText)
+void Notice::showText(QString text)
 {
-    Notice::mainObject->setText(setText);
-    Notice::mainObject->show();
+    Notice::noticeObject->text->setText(text);
+    Notice::noticeObject->toVisible();
 }
-
+/*
 void Notice::clear(int deleteId)
 {
     bool clear = false;
@@ -123,7 +122,7 @@ void Notice::clearAll()
 {
     m_content.clear();
     noticeId.clear();
-}
+}*/
 
 void Notice::toVisible()
 {
@@ -133,7 +132,7 @@ void Notice::toVisible()
         this->show();
         this->raise();
         hideTimer->start(2000);
-        keepHidden = true;
+        //keepHidden = true;
     }
 }
 
@@ -142,10 +141,10 @@ void Notice::toHidden()
 
     if(keepHidden)
     {
-        if(noticeId.isEmpty())
+        /*if(noticeId.isEmpty())
         {
             m_content.clear();
-        }
+        }*/
         this->hide();
         releaseTimer->start(4000);
     }
