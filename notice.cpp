@@ -35,8 +35,6 @@ Notice::Notice(MainWindow *parent)
     connect(hideTimer, SIGNAL(timeout()), opacityAnim, SLOT(start()));
     //connect(releaseTimer, SIGNAL(timeout()), this, SLOT(hide()));
     connect(opacityAnim, SIGNAL(finished()), this, SLOT(hide()));
-
-    //show();
 }
 
 void Notice::initFont()
@@ -47,6 +45,7 @@ void Notice::initFont()
     noticeFont->setLetterSpacing(QFont::PercentageSpacing, 110);
     noticeFont->setStretch(75);
 }
+
 /*
 int Notice::addText(QString addText)
 {
@@ -80,6 +79,7 @@ void Notice::showText(QString text)
     Notice::noticeObject->text->setText(text);
     Notice::noticeObject->toVisible();
 }
+
 /*
 void Notice::clear(int deleteId)
 {

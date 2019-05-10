@@ -18,8 +18,8 @@ EntryStats::EntryStats(MainWindow *parent)
     col1->setBackgroundVisible(false);
     col1->setStyleSheet(col0->styleSheet());
 
-    col0->setMaximumBlockCount(20);
-    col1->setMaximumBlockCount(20);
+    col0->setMaximumBlockCount(35);
+    col1->setMaximumBlockCount(35);
     col0->setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
     col1->setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
 
@@ -39,11 +39,11 @@ void EntryStats::addLine(QString line)
         cursor0.movePosition(QTextCursor::End);
         cursor0.select(QTextCursor::LineUnderCursor);
         cursor1.setPosition(QTextCursor::Start-1);
-        col1->insertPlainText(cursor0.selectedText());
+        cursor1.insertText(cursor0.selectedText());
         cursor0.removeSelectedText();
         cursor0.deletePreviousChar();
 
-        if(col1->blockCount() >= col1->maximumBlockCount())
+        if(col1->blockCount() >= col1->maximumBlockCount()-1)
         {
             cursor1.movePosition(QTextCursor::End);
             cursor1.select(QTextCursor::LineUnderCursor);

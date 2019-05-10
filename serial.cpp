@@ -45,7 +45,8 @@ bool Serial::openSerialPort()
     this->setFlowControl(QSerialPort::NoFlowControl);
     if(this->open(QIODevice::ReadWrite))
     {
-        m_parent->entrySerialLog->addLine("Connected");
+        m_parent->entrySerialLog->addLine("Port set to read-write");
+        m_parent->entrySerialLog->addLine("Pulling low ->");
         this->setBreakEnabled(true);
         breakTimer->start();
         return true;
@@ -53,6 +54,7 @@ bool Serial::openSerialPort()
     else
     {
         m_parent->entryErrors->addLine("Serial port open error - "+this->errorString());
+        EntryErrors::addLine("Serial port open error - "+this->errorString());
         return false;
     }
 }
@@ -96,21 +98,25 @@ void Serial::readSerial()
             {
                 overC = true;
                 m_parent->notice->showText("Overcurrent detected!");
+                EntryErrors::addLine("Overcurrent detected!");
             }
             else if(inData->at(1) == 'V' && !overV)
             {
                 overV = true;
                 m_parent->notice->showText("Overvoltage detected!");
+                EntryErrors::addLine("Overvoltage detected!");
             }
             else if(inData->at(1) == 'T' && !overT)
             {
                 overT = true;
                 m_parent->notice->showText("Overtemperature detected!");
+                EntryErrors::addLine("Overtemperature detected!");
             }
             else if(inData->at(1) == 'v' && !underV)
             {
                 underV = true;
                 m_parent->notice->showText("Low voltage detected!");
+                EntryErrors::addLine("Low voltage detected!");
             }
         }
         else if(inData->at(0) == 'u' && inData->at(1) == 'p')
@@ -186,8 +192,6 @@ void Serial::display(const QString &displayData)
         m_parent->entryTemp->setTemp(dataEntry, data);
         break;
     }
-
-
 }
 
 

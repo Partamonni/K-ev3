@@ -1,7 +1,10 @@
 #include "entryerrors.h"
+#include <QTime>
 
 EntryErrors::EntryErrors(MainWindow *parent)
 {
+    EntryErrors::errorsObject = this;
+
     entryLayout->addWidget(col0,0,0);
     entryLayout->addWidget(col1,0,1);
     entryLayout->setMargin(15);
@@ -18,33 +21,38 @@ EntryErrors::EntryErrors(MainWindow *parent)
     col1->setBackgroundVisible(false);
     col1->setStyleSheet(col0->styleSheet());
 
-    col0->setMaximumBlockCount(20);
-    col1->setMaximumBlockCount(20);
+    col0->setMaximumBlockCount(35);
+    col1->setMaximumBlockCount(35);
     col0->setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
     col1->setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
 
-
-
 }
 
+
 void EntryErrors::addLine(QString line)
+{
+    EntryErrors::errorsObject->m_addLine(line);
+}
+
+void EntryErrors::m_addLine(QString line)
 {
     QTextCursor cursor0 = col0->textCursor();
     QTextCursor cursor1 = col1->textCursor();
     cursor0.setPosition(QTextCursor::Start-1);
 
-    cursor0.insertText(line+"\n");
+    QTime currentTime = QTime::currentTime();
+    cursor0.insertText(currentTime.toString()+" - "+line+"\n");
 
     if(col0->blockCount() == col0->maximumBlockCount())
     {
         cursor0.movePosition(QTextCursor::End);
         cursor0.select(QTextCursor::LineUnderCursor);
         cursor1.setPosition(QTextCursor::Start-1);
-        col1->insertPlainText(cursor0.selectedText());
+        cursor1.insertText(cursor0.selectedText());
         cursor0.removeSelectedText();
         cursor0.deletePreviousChar();
 
-        if(col1->blockCount() >= col1->maximumBlockCount())
+        if(col1->blockCount() >= col1->maximumBlockCount()-1)
         {
             cursor1.movePosition(QTextCursor::End);
             cursor1.select(QTextCursor::LineUnderCursor);

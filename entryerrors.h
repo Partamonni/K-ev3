@@ -11,11 +11,15 @@ class EntryErrors : public Entry
 public:
     EntryErrors(MainWindow *parent);
 
-    void addLine(QString line);
+    static void addLine(QString line);
 
 private:
     QPlainTextEdit *col0 = new QPlainTextEdit;
     QPlainTextEdit *col1 = new QPlainTextEdit;
+
+    void m_addLine(QString);
+
+    static EntryErrors *errorsObject;
 };
 
 #endif // ENTRYERRORS_H

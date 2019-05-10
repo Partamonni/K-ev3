@@ -125,7 +125,10 @@ void MainWindow::toggleEntry()
         if(!menu->isClosing())
         {
             entries[selPos]->toggleEntry();
-            closingEntry = entries[selPos];
+            if(entries[selPos]->hidesPrevious())
+                closingEntry = entries[selPos];
+            else
+                closingEntry = nullptr;
         }
     }
 }
@@ -142,6 +145,7 @@ void MainWindow::motorShut(bool state)
         Notice::showText("Motor power is now on");
         entryMotor->setText("Power Off\nMotor");
     }
+    entryMotor->success();
 }
 
 void MainWindow::clearClosingEntry()
