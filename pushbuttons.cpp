@@ -6,6 +6,7 @@
 
 #include "mainwindow.h"
 #include "wiringPi.h"
+#include "notice.h"
 
 #define output33 1
 #define inputL 26
@@ -15,7 +16,7 @@
 
 PushButtons::PushButtons(MainWindow *parent)
 {
-    isrClass = this;
+    isrObject = this;
     wiringPiSetup();
     m_parent = parent;
     menu = m_parent->menu;
@@ -40,57 +41,110 @@ PushButtons::PushButtons(MainWindow *parent)
     connect(timerL, &QTimer::timeout, this, &PushButtons::switchL);
     connect(timerR, &QTimer::timeout, this, &PushButtons::switchR);
     connect(holdTimer, &QTimer::timeout, this, &PushButtons::closeMenu);
+    connect(this, &PushButtons::signalL, this, &PushButtons::switchL);
+    connect(this, &PushButtons::signalR, this, &PushButtons::switchR);
 }
 
 
 void PushButtons::isrCatchL()
 {
-    if(!isrClass->lActive)
+    /*if(!isrObject->lActive)
     { // If pressed, ignore bounces and start debounce timer
-        isrClass->lActive = true;
-        if(!digitalRead(inputL) && !isrClass->holdTimer->isActive())
-            isrClass->timerL->start();
-        else if(isrClass->holdTimer->isActive())
+        isrObject->lActive = true;
+        if(!digitalRead(inputL) && !isrObject->holdTimer->isActive())
+            isrObject->timerL->start();
+        else if(isrObject->holdTimer->isActive())
         {   // If button wasn't held long enough, it was typical press.
-            isrClass->holdTimer->stop();
-            isrClass->menu->toggleSelector();
-            isrClass->lActive = false;
-        } // If the press didn't last the debounce, just reset lActive flag
-
+            isrObject->holdTimer->stop();
+            isrObject->menu->toggleSelector();
+            isrObject->lActive = false;
+        }
+    }*/
+    if(!isrObject->lActive)
+    {
+        isrObject->lActive = true;
+        emit isrObject->signalL();
     }
 }
 
 void PushButtons::isrCatchR()
 {
-    if(!isrClass->rActive)
+    /*if(!isrObject->rActive)
     {
-        isrClass->rActive = true;
+        isrObject->rActive = true;
         if(!digitalRead(inputR))
-            isrClass->timerR->start();
-        else if(isrClass->rHeld)
+            isrObject->timerR->start();
+        else if(isrObject->rHeld)
         {
-            //isrClass->menu->toggleEntry(); HOX!
+            isrObject->m_parent->toggleEntry();
         }
+    }*/
+    if(!isrObject->rActive)
+    {
+        isrObject->rActive = true;
+        emit isrObject->signalR();
     }
 }
 
 void PushButtons::switchL()
 {
-    if(!digitalRead(inputL)) // If button is really pressed
+    if(!lDown)
     {
-        holdTimer->start();
-    }   // return to wait release
-    lActive = false;
+        if(!lBouncing && !digitalRead(inputL))
+        {
+            timerL->start();
+            lBouncing = true;
+        }
+        else if(lBouncing && !digitalRead(inputL))
+        {
+            lBouncing = false;
+            lDown = true;
+            if(menu->isOpen())
+                holdTimer->start();
+            else
+                menu->openMenu();
+            lActive = false;
+        }   // return to wait release
+        else
+            lActive = false;
+    }
+    else
+    {
+        if(!lBouncing && digitalRead(inputL))
+        {
+            timerL->start();
+            lBouncing = true;
+        }
+        else if(lBouncing && digitalRead(inputL))
+        {
+            lBouncing = false;
+            if(holdTimer->isActive())
+            {   // If button wasn't held long enough, it was typical press.
+                holdTimer->stop();
+                menu->toggleSelector();
+            }
+            lDown = false;
+            lActive = false;
+        }
+        else
+            lActive = false;
+    }
 }
 
 void PushButtons::switchR()
 {
-    if(!digitalRead(inputR))
-    {   // If button is really pressed
-        // menu->toggleEntry(); HOX!
-        rHeld = true;
-    }   // Return to wait release
-    rActive = false;
+    if(!rBouncing && !digitalRead(inputR))
+    {
+        timerR->start();
+        rBouncing = true;
+    }
+    else if(rBouncing && !digitalRead(inputR))
+    {
+        m_parent->toggleEntry();
+        rActive = false;
+    }
+    else
+        rActive = false;
 }
 
 void PushButtons::closeMenu()

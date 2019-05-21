@@ -96,40 +96,53 @@ void MainWindow::keyPressEvent(QKeyEvent *keyEvent)
 
 void MainWindow::toggleEntry()
 {
-    if(menu->isVisible())
+    if(menu->isOpen())
     {
         int selPos = menu->selectorPosition();
-        if(closingEntry != nullptr)
-        {
-            if(closingEntry->isClosing())
+
+        if(entryOpen)
+        { // If any entry is already open
+            if(closingEntry->isClosing()) // If it's already closing, don't toggle
                 return;
             else
             {
                 if(entries[selPos]->hidesPrevious())
                 {
-                    closingEntry->toggleEntry();
-
-                    if(closingEntry == entries[selPos])
-                    {
+                    if(entries[selPos] == closingEntry)
+                    { // If it was the same entry, toggle and done
+                        entries[selPos]->toggleEntry();
                         closingEntry = nullptr;
-                        return;
+                        entryOpen = false;
+                    }
+                    else
+                    {
+                        closingEntry->toggleEntry();
+                        entries[selPos]->toggleEntry();
+                        closingEntry = entries[selPos];
                     }
                 }
                 else
-                {
+                { // If it doesn't hide previous, just toggle it
                     entries[selPos]->toggleEntry();
-                    return;
                 }
             }
         }
-        if(!menu->isClosing())
-        {
+        else
+        { // If no entry is open, toggle selected entry
             entries[selPos]->toggleEntry();
+            // If entry can't be with other entries, make it the next closing entry.
             if(entries[selPos]->hidesPrevious())
+            {
                 closingEntry = entries[selPos];
-            else
-                closingEntry = nullptr;
+                entryOpen = true;
+            }
         }
+    }
+    else if(closingEntry != nullptr)
+    { // If toggle is initiated from closing menu
+        closingEntry->toggleEntry();
+        closingEntry = nullptr;
+        entryOpen = false;
     }
 }
 

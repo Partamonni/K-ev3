@@ -8,12 +8,12 @@ Entry::Entry(MainWindow *parent)
     m_parent = parent;
     entWidth = SCR_WIDTH*3/4;
 
+    entryRender = new QPixmap(this->size());
+
     this->setLayout(bgLayout);
     bgLayout->setContentsMargins(0,0,0,0);
     bgLayout->addWidget(entryFrame);
     entryFrame->setLayout(entryLayout);
-
-    entryRender = new QPixmap(this->size());
 
     QFont font("Digital-7 Mono", 28, Qt::white);
     this->setFont(font);
@@ -28,6 +28,7 @@ Entry::Entry(MainWindow *parent)
     this->setPixmap(*entryBg);
     entryLayout->setContentsMargins(0,0,0,0);
     entryLayout->setSpacing(0);
+
     this->hide();
 
     motEffEntry->setEasingCurve(QEasingCurve::InSine);
@@ -40,6 +41,7 @@ void Entry::toggleEntry()
 {
     if(!entryOpen)
     {
+        entryFrame->show();
         this->render(entryRender);
         this->setPixmap(*entryRender);
 

@@ -22,25 +22,28 @@ public:
 
     static void isrCatchR();
     static void isrCatchL();
-    static PushButtons *isrClass;
 
 public slots:
     void switchL();
     void switchR();
 
 signals:
+    void signalL();
+    void signalR();
 
 private:
     MainWindow *m_parent;
 
     bool lActive = false;
     bool rActive = false;
-    bool rHeld = false;
+    bool lBouncing = false;
+    bool rBouncing = false;
+    bool lDown = false;
     int debounceTime = 50;
 
-    QTimer *holdTimer = new QTimer;
-    QTimer *timerL = new QTimer;
-    QTimer *timerR = new QTimer;
+    QTimer *holdTimer = new QTimer(this);
+    QTimer *timerL = new QTimer(this);
+    QTimer *timerR = new QTimer(this);
     Menu *menu = nullptr;
 
 private slots:

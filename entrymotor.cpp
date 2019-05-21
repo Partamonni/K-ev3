@@ -32,7 +32,7 @@ void EntryMotor::toggleEntry()
     else
     {
         Notice::showText("Serial not set!");
-        //m_parent->entryErrors
+        EntryErrors::addLine("Serial wasn't open - Couldn't power motor");
     }
 }
 

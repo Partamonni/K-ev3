@@ -26,6 +26,7 @@
 
 extern int SCR_WIDTH;
 extern int SCR_HEIGHT;
+extern PushButtons *isrObject;
 
 class MainWindow : public QMainWindow
 {

@@ -22,6 +22,7 @@ public:
     int buttonCount();
     int entryCount();
     bool isClosing();
+    bool isOpen();
 
 public slots:
     void toggleSelector();
@@ -54,8 +55,8 @@ private:
     Button *btn4 = new Button(this, "Errors");
     Button *btn5 = new Button(this, "Motor Power\nOn");
 
-    QPropertyAnimation *motEffMen = new QPropertyAnimation(this, "pos"); // motion effect for menu
-    QPropertyAnimation *motEffSel = new QPropertyAnimation(selector, "pos"); // motion effect for selector
+    QPropertyAnimation *motEffMen = new QPropertyAnimation(this, "pos");
+    QPropertyAnimation *motEffSel = new QPropertyAnimation(selector, "pos");
 
     friend class PushButtons;
 private slots:

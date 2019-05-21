@@ -8,9 +8,10 @@
 Menu::Menu(MainWindow *parent)
 {
     this->setFixedSize(SCR_WIDTH/4, SCR_HEIGHT);
-    this->setLayout(bgLayout);
 
     menuRender = new QPixmap(this->size());
+
+    this->setLayout(bgLayout);
     bgLayout->setContentsMargins(0,0,0,0);
     bgLayout->addWidget(menuFrame);
     menuFrame->setLayout(layout);
@@ -25,13 +26,14 @@ Menu::Menu(MainWindow *parent)
     layout->setSpacing(0);
     layout->addWidget(selector,0,0);
 
+    this->hide();
+
     motEffMen->setEasingCurve(QEasingCurve::InOutQuad);
     motEffMen->setDuration(500);
 
     motEffSel->setEasingCurve(QEasingCurve::OutQuint);
     motEffSel->setDuration(300);
 
-    menuFrame->hide();
     connect(motEffMen, &QPropertyAnimation::finished, this, &Menu::hideMenu);
 }
 
@@ -41,7 +43,7 @@ void Menu::toggleSelector()
         motEffSel->stop();
 
     motEffSel->setStartValue(QPoint(0, selPos * selectorHeight));
-    if(++selPos >= btnCount)
+    if(++selPos >= btnCount) // Increase by one, 0 if goes over bounds
         selPos = 0;
     motEffSel->setEndValue(QPoint(0, selPos * selectorHeight));
     motEffSel->start();
@@ -54,25 +56,31 @@ void Menu::addButton(QPushButton *btn)
 }
 
 int Menu::buttonCount()
-{return btnCount;}
+{
+    return btnCount;
+}
 
 void Menu::openMenu()
 {
+    menuFrame->show();
+    this->render(menuRender);
+    this->setPixmap(*menuRender);
+
     motEffMen->setDirection(QPropertyAnimation::Forward);
     motEffMen->setStartValue(QPoint(0,-this->height()));
     motEffMen->setEndValue(QPoint(0,0));
-    menuFrame->render(menuRender);
-    this->setPixmap(*menuRender);
+    menuFrame->hide();
+    this->show();
+
     motEffMen->start();
     menuOpen = true;
-    this->show();
 }
 
 void Menu::closeMenu()
 {
     if(menuOpen)
     {
-        menuFrame->render(menuRender);
+        this->render(menuRender);
         this->setPixmap(*menuRender);
         motEffMen->setEndValue(this->pos());
         motEffMen->setDirection(QPropertyAnimation::Backward);
@@ -111,4 +119,9 @@ bool Menu::isClosing()
         return true;
     else
         return false;
+}
+
+bool Menu::isOpen()
+{
+    return menuOpen;
 }
