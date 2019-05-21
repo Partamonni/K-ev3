@@ -37,7 +37,7 @@ private:
     int selPos = 0;
     int btnCount = 6;
     int btnsInserted = 0;
-    int selectorHeight;
+    int selectorHeight = 0;
     bool menuOpen = false;
     int holdReleaseTime = 600;
 

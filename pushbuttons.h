@@ -32,14 +32,14 @@ signals:
     void signalR();
 
 private:
-    MainWindow *m_parent;
+    MainWindow *m_parent = nullptr;
 
     bool lActive = false;
     bool rActive = false;
     bool lBouncing = false;
     bool rBouncing = false;
     bool lDown = false;
-    int debounceTime = 50;
+    int debounceTime = 50; //ms
 
     QTimer *holdTimer = new QTimer(this);
     QTimer *timerL = new QTimer(this);

@@ -48,18 +48,6 @@ PushButtons::PushButtons(MainWindow *parent)
 
 void PushButtons::isrCatchL()
 {
-    /*if(!isrObject->lActive)
-    { // If pressed, ignore bounces and start debounce timer
-        isrObject->lActive = true;
-        if(!digitalRead(inputL) && !isrObject->holdTimer->isActive())
-            isrObject->timerL->start();
-        else if(isrObject->holdTimer->isActive())
-        {   // If button wasn't held long enough, it was typical press.
-            isrObject->holdTimer->stop();
-            isrObject->menu->toggleSelector();
-            isrObject->lActive = false;
-        }
-    }*/
     if(!isrObject->lActive)
     {
         isrObject->lActive = true;
@@ -69,16 +57,6 @@ void PushButtons::isrCatchL()
 
 void PushButtons::isrCatchR()
 {
-    /*if(!isrObject->rActive)
-    {
-        isrObject->rActive = true;
-        if(!digitalRead(inputR))
-            isrObject->timerR->start();
-        else if(isrObject->rHeld)
-        {
-            isrObject->m_parent->toggleEntry();
-        }
-    }*/
     if(!isrObject->rActive)
     {
         isrObject->rActive = true;

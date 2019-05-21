@@ -37,8 +37,8 @@ protected:
     bool hidePrevious = true;
 
 private:
-    int entWidth;
-    bool entryOpen;
+    int entWidth = 0;
+    bool entryOpen = false;
 
 private slots:
     void hideEntry();

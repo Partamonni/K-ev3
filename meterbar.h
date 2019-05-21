@@ -18,8 +18,8 @@ public:
     Meterbar();
 
 public slots:
-    void setAmp(QString amp){amps->setText(amp);}
-    void setVolt(QString volt){volts->setText(volt);}
+    void setAmp(QString amp){ amps->setText(amp); }
+    void setVolt(QString volt){ volts->setText(volt); }
 
 private:
     QWidget *meterFrame = new QWidget;

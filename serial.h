@@ -32,7 +32,7 @@ private:
     void display(const QString &displayData);
 
     QString *inData = new QString;
-    MainWindow *m_parent;
+    MainWindow *m_parent = nullptr;
     QTimer *breakTimer = new QTimer;
 
     int dataEntry = 0;

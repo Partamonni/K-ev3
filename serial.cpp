@@ -19,14 +19,11 @@ Serial::Serial(MainWindow *parent)
     connect(this, static_cast<void (QSerialPort::*)(QSerialPort::SerialPortError)>(&QSerialPort::error),
             this, &Serial::handleError);
 
-    connect(this, &QSerialPort::readyRead,
-            this, &Serial::readSerial);
+    connect(this, &QSerialPort::readyRead, this, &Serial::readSerial);
 
-    connect(this, &Serial::motorShut,
-            parent, &MainWindow::motorShut);
+    connect(this, &Serial::motorShut, parent, &MainWindow::motorShut);
 
-    connect(breakTimer, &QTimer::timeout,
-            this, &Serial::stopBreak);
+    connect(breakTimer, &QTimer::timeout, this, &Serial::stopBreak);
 }
 
 bool Serial::openSerialPort()
@@ -53,7 +50,7 @@ bool Serial::openSerialPort()
     }
     else
     {
-        m_parent->entryErrors->addLine("Serial port open error - "+this->errorString());
+        m_parent->entrySerialLog->addLine("Serial port open error - "+this->errorString());
         EntryErrors::addLine("Serial port open error - "+this->errorString());
         return false;
     }
@@ -86,36 +83,38 @@ void Serial::readSerial()
         if(inData->at(0) == 'e' || inData->at(0) == '~')
         {
             writeSerial("ok\n");
+            m_parent->entrySerialLog->addLine("ok");
         }
         else if(inData->at(0) == '?' && inData->at(1) == 'h')
         {
-            this->write("ok\n");
+            writeSerial("ok\n");
             m_parent->entrySerialLog->addLine("ok");
         }
         else if(inData->at(0) == '!')
         {
+            emit motorShut(true);
             if(inData->at(1) == 'C' && !overC)
             {
                 overC = true;
-                m_parent->notice->showText("Overcurrent detected!");
+                Notice::showText("Overcurrent detected!");
                 EntryErrors::addLine("Overcurrent detected!");
             }
             else if(inData->at(1) == 'V' && !overV)
             {
                 overV = true;
-                m_parent->notice->showText("Overvoltage detected!");
+                Notice::showText("Overvoltage detected!");
                 EntryErrors::addLine("Overvoltage detected!");
             }
             else if(inData->at(1) == 'T' && !overT)
             {
                 overT = true;
-                m_parent->notice->showText("Overtemperature detected!");
+                Notice::showText("Overtemperature detected!");
                 EntryErrors::addLine("Overtemperature detected!");
             }
             else if(inData->at(1) == 'v' && !underV)
             {
                 underV = true;
-                m_parent->notice->showText("Low voltage detected!");
+                Notice::showText("Low voltage detected!");
                 EntryErrors::addLine("Low voltage detected!");
             }
         }
@@ -155,11 +154,10 @@ void Serial::readSerial()
         }
         else
         {
-            // Unknown data
+             EntryErrors::addLine("Unknown serial data received: "+inData->left(i));
         }
         m_parent->entrySerialLog->addLine(inData->left(i));
         *inData = inData->remove(0,i+1);
-
     }
 }
 
@@ -203,7 +201,7 @@ void Serial::stopBreak()
 void Serial::handleError(QSerialPort::SerialPortError error)
 {
     if (error == QSerialPort::ResourceError) {
-        m_parent->notice->showText("Serial port error!");
+        Notice::showText("Serial port error!");
         m_parent->entrySerialLog->addLine("Serial port error - "+this->errorString());
         closeSerialPort();
     }

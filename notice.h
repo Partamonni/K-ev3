@@ -17,24 +17,15 @@ class Notice : public QLabel
 public:
     explicit Notice(MainWindow *parent = nullptr);
 
-signals:
-
 public slots:
     static void showText(QString);
-    /*
-    int addText(QString);
-    void clear(int);
-    void clearAll();*/
 
 private:
-    //QString m_content = "BOOT COMPLETE!";
-    QVector<int> noticeId;
-    MainWindow *m_parent;
+    MainWindow *m_parent = nullptr;
     QGridLayout *layout = new QGridLayout;
     QLabel *text = new QLabel();
     QPixmap *bgImg = new QPixmap(":/entrybg");
     QTimer *hideTimer = new QTimer;
-    QTimer *releaseTimer = new QTimer;
     QFont *noticeFont = new QFont;
     static Notice *noticeObject;
 
@@ -43,11 +34,8 @@ private:
     QGraphicsOpacityEffect *opacity = new QGraphicsOpacityEffect(this);
     QPropertyAnimation *opacityAnim = new QPropertyAnimation(opacity, "opacity");
 
-    bool keepHidden = false;
-
 private slots:
     void toVisible();
-    void toHidden();
 };
 
 #endif // NOTICE_H

@@ -54,7 +54,6 @@ private:
     void keyPressEvent(QKeyEvent *keyEvent);
 #endif
 
-    void (Entry::*toggleEntryFunc)() = nullptr;
     bool entryOpen = false;
 
     QWidget *center = new QWidget;
