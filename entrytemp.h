@@ -7,6 +7,11 @@
 #include <QLabel>
 #include <QPixmap>
 
+#define PACK_COUNT 40
+/* Entry that shows available battery cell temperatures
+ * with preconfigured count.
+ */
+
 class MainWindow;
 
 
@@ -16,7 +21,7 @@ public:
     EntryTemp(MainWindow *parent);
     void setTemp(int position, QString text);
 private:
-    QLabel *packTemp[40];
+    QLabel *packTemp[PACK_COUNT];
     QGridLayout *grid = entryLayout;
 };
 

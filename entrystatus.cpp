@@ -1,5 +1,7 @@
 #include "entrystatus.h"
 
+// Near carbon copy of EntrySerialLog
+
 EntryStatus::EntryStatus(MainWindow *parent)
 {
     entryLayout->addWidget(col0,0,0);

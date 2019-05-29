@@ -9,6 +9,8 @@
 #include "notice.h"
 
 #define output33 1
+// This is voltage source to go along with the physical serial wires
+
 #define inputL 26
 #define inputR 27
 
@@ -16,10 +18,11 @@
 
 PushButtons::PushButtons(MainWindow *parent)
 {
+    // Set this object to be the class for the physical buttons
     isrObject = this;
-    wiringPiSetup();
+    wiringPiSetup(); // Initialize wiringPi
     m_parent = parent;
-    menu = m_parent->menu;
+    menu = m_parent->menu; // Pointer to simplify code
     pinMode(output33, OUTPUT);
     digitalWrite(output33, 1);
 
@@ -45,13 +48,14 @@ PushButtons::PushButtons(MainWindow *parent)
     connect(this, &PushButtons::signalR, this, &PushButtons::switchR);
 }
 
-
+// These must-be-static functions catch wiringPi ISR
 void PushButtons::isrCatchL()
 {
     if(!isrObject->lActive)
     {
         isrObject->lActive = true;
         emit isrObject->signalL();
+        // To start timers in other threads, one must use signals & slots
     }
 }
 
@@ -66,12 +70,14 @@ void PushButtons::isrCatchR()
 
 void PushButtons::switchL()
 {
-    if(!lDown)
+    if(!lDown) // The button is being pressed
     {
-        if(!lBouncing && !digitalRead(inputL))
+        if(!lBouncing && !digitalRead(inputL)) // Bouncing
         {
             timerL->start();
             lBouncing = true;
+            // This timer returns to this function after timeout
+            // with lBouncing == true
         }
         else if(lBouncing && !digitalRead(inputL))
         {
@@ -84,11 +90,11 @@ void PushButtons::switchL()
             lActive = false;
         }   // return to wait release
         else
-            lActive = false;
+            lActive = false; // If the press wasn't good enough
     }
-    else
+    else // The button is being released
     {
-        if(!lBouncing && digitalRead(inputL))
+        if(!lBouncing && digitalRead(inputL)) // Bouncing
         {
             timerL->start();
             lBouncing = true;
@@ -105,7 +111,7 @@ void PushButtons::switchL()
             lActive = false;
         }
         else
-            lActive = false;
+            lActive = false; // If the release didn't happen
     }
 }
 

@@ -4,6 +4,12 @@
 #include <QWidget>
 #include <QPushButton>
 
+
+/* These buttons are rather some dummy labels at the end of the design.
+ * Reason is that it was during the writing to call the openable objects
+ * directly from the function that controls their function.
+ */
+
 class Menu;
 
 class Button : public QWidget
@@ -13,6 +19,7 @@ class Button : public QWidget
 public:
     Button(Menu *parent = nullptr, QString text = nullptr);
 
+private:
     QPushButton *button = new QPushButton;
 };
 

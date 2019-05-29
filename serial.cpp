@@ -11,7 +11,7 @@
 Serial::Serial(MainWindow *parent)
 {
     m_parent = parent;
-    inData->reserve(100);
+    inData->reserve(100); // Just in case, reserve a buffer
 
     breakTimer->setSingleShot(true);
     breakTimer->setInterval(1000);
@@ -40,11 +40,12 @@ bool Serial::openSerialPort()
     this->setParity(QSerialPort::NoParity);
     this->setStopBits(QSerialPort::OneStop);
     this->setFlowControl(QSerialPort::NoFlowControl);
-    if(this->open(QIODevice::ReadWrite))
+    if(this->open(QIODevice::ReadWrite)) // If opening is succesful
     {
         m_parent->entrySerialLog->addLine("Port set to read-write");
         m_parent->entrySerialLog->addLine("Pulling low ->");
         this->setBreakEnabled(true);
+        // Line needs to be held low to Power module to start communicating
         breakTimer->start();
         return true;
     }
@@ -65,12 +66,15 @@ void Serial::closeSerialPort()
 
 void Serial::readSerial()
 {
+    // Read data into a QBytearray
     const QByteArray data = this->readAll();
 
+    // Copy data to a QString for easier handling
     inData->append(QString::fromUtf8(data));
 
     while(inData->contains('\n') || inData->contains('\r'))
     {
+        // Get the first line-ending character and its index
         int i;
         if(inData->contains('\n'))
         {
@@ -80,17 +84,17 @@ void Serial::readSerial()
         else
             i = inData->indexOf('\r');
 
-        if(inData->at(0) == 'e' || inData->at(0) == '~')
-        {
-            writeSerial("ok\n");
-            m_parent->entrySerialLog->addLine("ok");
-        }
-        else if(inData->at(0) == '?' && inData->at(1) == 'h')
-        {
-            writeSerial("ok\n");
-            m_parent->entrySerialLog->addLine("ok");
-        }
-        else if(inData->at(0) == '!')
+        /* Depending of the first character, do accordingly
+         * e = end of data (e~)
+         * ? = host presence / continue operation query (?h)
+         * ! = critical condition occurred (over[!C]urrent, over[!V]oltage, under[!v]oltage or high [!T]emperature)
+         * u = power is on (up)
+         * s = power is shut (sh)
+         * : = data point (Battery [c]urrent, battery [v]voltage, # battery unit cell number and its temperature)
+         */
+
+
+        if(inData->at(0) == '!') // Handle critical errors immidiately if occurred
         {
             emit motorShut(true);
             if(inData->at(1) == 'C' && !overC)
@@ -116,6 +120,20 @@ void Serial::readSerial()
                 underV = true;
                 Notice::showText("Low voltage detected!");
                 EntryErrors::addLine("Low voltage detected!");
+            }
+        }
+        else if(inData->at(0) == 'e' || inData->at(0) == '~')
+        {
+            // If end of data received, inform to be ready to receive another batch
+            writeSerial("ok\n");
+            m_parent->entrySerialLog->addLine("ok");
+        }
+        else if(inData->at(0) == '?' && inData->at(1) == 'h')
+        {
+            if(m_parent->entryMotor->powerEnabled) // Only if we want power on;
+            {
+                writeSerial("ok\n");
+                m_parent->entrySerialLog->addLine("ok");
             }
         }
         else if(inData->at(0) == 'u' && inData->at(1) == 'p')
@@ -144,18 +162,22 @@ void Serial::readSerial()
             }
             else
             {
-                QString entryNum = inData->mid(1,inData->indexOf('-')-1);
-                dataEntry = entryNum.toInt();
-                if(inData->mid(inData->indexOf('-')+1,i-inData->indexOf('-')-1) != "257.0")
-                    display(inData->mid(inData->indexOf('-')+1,i-inData->indexOf('-')-1));
+                QString entryNum = inData->mid(1,inData->indexOf('-')-1); // Get the 1 or 2 number index
+                dataEntry = entryNum.toInt(); // Change it to integer
+                QString dataValue = inData->mid(inData->indexOf('-')+1,i-inData->indexOf('-')-1); // Get the value
+                if(dataValue != "257.0") // Check if it's valid
+                    display(dataValue);
                 else
-                    display("CRC");
+                    display("CRC"); // Otherwise it's CRC error
             }
         }
         else
         {
-             EntryErrors::addLine("Unknown serial data received: "+inData->left(i));
+            // If first character wasn't any of the above, it was corrupted message
+            EntryErrors::addLine("Unknown serial data received: "+inData->left(i));
         }
+
+        // Last, add the message to serial log and remove it from the QString variable
         m_parent->entrySerialLog->addLine(inData->left(i));
         *inData = inData->remove(0,i+1);
     }
@@ -166,7 +188,7 @@ void Serial::writeSerial(const QByteArray &outData)
 {
     this->write(outData);
     QByteArray temp = outData;
-    temp.chop(1);
+    temp.chop(1); // Delete nl after sending it
     m_parent->entrySerialLog->addLine(temp + " ------->");
 }
 

@@ -1,6 +1,10 @@
 #ifndef ENTRYSTATUS_H
 #define ENTRYSTATUS_H
 
+/* Text entry that could hold information about
+ * battery capacity, capacity remaining, approximate range, battery health etc.
+ */
+
 #include "entry.h"
 #include <QPlainTextEdit>
 

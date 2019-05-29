@@ -4,6 +4,9 @@
 #include "entry.h"
 #include <QPlainTextEdit>
 
+/* Text entry that shows in- and outgoing messages nad some basic info of serial devices state.
+ */
+
 class MainWindow;
 
 class EntrySerialLog : public Entry

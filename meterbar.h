@@ -1,6 +1,9 @@
 #ifndef METERBAR_H
 #define METERBAR_H
 
+/* Widget to show amperage and voltage on the main screen.
+ */
+
 #include <QWidget>
 #include <QLabel>
 #include <QTime>

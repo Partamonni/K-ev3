@@ -9,6 +9,7 @@ Menu::Menu(MainWindow *parent)
 {
     this->setFixedSize(SCR_WIDTH/4, SCR_HEIGHT);
 
+    // Initialize render pixmap size
     menuRender = new QPixmap(this->size());
 
     this->setLayout(bgLayout);
@@ -59,6 +60,8 @@ int Menu::buttonCount()
 {
     return btnCount;
 }
+
+// For functionality, see class Entry.
 
 void Menu::openMenu()
 {

@@ -1,6 +1,8 @@
 #ifndef PUSHBUTTONS_H
 #define PUSHBUTTONS_H
 
+/* Class for real-time pushbutton control using wiringPi.
+ */
 
 #if RPI
 
@@ -20,11 +22,11 @@ class PushButtons : public QObject
 public:
     PushButtons(MainWindow *parent);
 
-    static void isrCatchR();
+    static void isrCatchR(); // C-compatible functions that  wiringPi can use
     static void isrCatchL();
 
 public slots:
-    void switchL();
+    void switchL(); // Button logics for left and right buttons
     void switchR();
 
 signals:
@@ -42,7 +44,7 @@ private:
     int debounceTime = 50; //ms
 
     QTimer *holdTimer = new QTimer(this);
-    QTimer *timerL = new QTimer(this);
+    QTimer *timerL = new QTimer(this); // For debouncing
     QTimer *timerR = new QTimer(this);
     Menu *menu = nullptr;
 

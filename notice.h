@@ -1,6 +1,11 @@
 #ifndef NOTICE_H
 #define NOTICE_H
 
+/* Globally accessible and animated splash notification.
+ * Needs a declaration of Notice::*noticeObject in main.cpp, which holds
+ * the pointer to latest constructed class.
+ */
+
 #include <QWidget>
 #include <QLabel>
 #include <QGridLayout>

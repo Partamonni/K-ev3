@@ -8,9 +8,6 @@ QT       += core gui serialport
 
 greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
 
-#target.path = /home/pi/K-ev3
-#INSTALLS += target
-
 TARGET = K-ev3
 TEMPLATE = app
 
@@ -19,6 +16,9 @@ TEMPLATE = app
 # depend on your compiler). Please consult the documentation of the
 # deprecated API in order to know how to port your code away from it.
 DEFINES += QT_DEPRECATED_WARNINGS
+
+# This is defined to ease switching between win and linux versions of program.
+# Windows version was used for quicker compilation and easier debug for parts that weren't platform specific.
 DEFINES += RPI=1
 
 # You can also make your code fail to compile if you use deprecated APIs.
@@ -43,7 +43,7 @@ SOURCES += \
     entry.cpp \
     entrytemp.cpp \
     entryerrors.cpp \
-    entrystats.cpp \
+    #entrystats.cpp \
     entrystatus.cpp \
     entryseriallog.cpp \
     entrymotor.cpp \
@@ -60,7 +60,7 @@ HEADERS += \
     entry.h \
     entrytemp.h \
     entryerrors.h \
-    entrystats.h \
+    #entrystats.h \
     entrystatus.h \
     entryseriallog.h \
     entrymotor.h \

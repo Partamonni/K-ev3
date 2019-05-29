@@ -1,6 +1,8 @@
 #include "entryerrors.h"
 #include <QTime>
 
+// Near carbon copy of EntrySerialLog
+
 EntryErrors::EntryErrors(MainWindow *parent)
 {
     EntryErrors::errorsObject = this;

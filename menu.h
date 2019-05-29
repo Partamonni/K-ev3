@@ -1,6 +1,9 @@
 #ifndef MENU_H
 #define MENU_H
 
+/* Animated menu widget, contains button labels and the selector.
+ */
+
 #include <QLabel>
 #include <QBoxLayout>
 #include <QFont>
@@ -35,7 +38,7 @@ signals:
 
 private:
     int selPos = 0;
-    int btnCount = 6;
+    int btnCount = 5;
     int btnsInserted = 0;
     int selectorHeight = 0;
     bool menuOpen = false;
@@ -50,7 +53,7 @@ private:
 
     Button *btn0 = new Button(this, "Temperatures");
     Button *btn1 = new Button(this, "Status");
-    Button *btn2 = new Button(this, "Stats");
+    //Button *btn2 = new Button(this, "Stats");
     Button *btn3 = new Button(this, "Serial Log");
     Button *btn4 = new Button(this, "Errors");
     Button *btn5 = new Button(this, "Motor Power\nOn");

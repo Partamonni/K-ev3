@@ -6,20 +6,22 @@
 
 MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent)
 {
+    // Make an array of pointers to entries
     entries = new Entry*[menu->buttonCount()];
+
     serial->openSerialPort();
     entryMotor->setSerial(serial);
 
     this->setFixedSize(SCR_WIDTH,SCR_HEIGHT);
     this->setWindowFlags(Qt::FramelessWindowHint);
-
     this->setCentralWidget(center);
+    center->setLayout(bgLayout);
     #if !RPI
     this->grabMouse();
     this->grabKeyboard();
     #endif
 
-    center->setLayout(bgLayout);
+    // A bit of arranging and styling
     bgLayout->setContentsMargins(0,0,0,0);
     bgLayout->addWidget(bgLabel,1,1,3,3);
     bgLayout->addWidget(clock,1,3,(Qt::AlignTop | Qt::AlignRight));
@@ -37,23 +39,25 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent)
     fgFrame->setGraphicsEffect(opaEff);
     opaEff->setOpacity(0.98);
 
+    // entryStats and entryStatus is to be combined
     fgLayout->setHorizontalSpacing(0);
     fgLayout->setContentsMargins(0,0,0,0);
     fgLayout->addWidget(menu,1,1,3,1,Qt::AlignLeft|Qt::AlignTop);
     fgLayout->addWidget(entryTemp,1,2,3,3, Qt::AlignRight|Qt::AlignTop);
     fgLayout->addWidget(entryMotor,1,2,3,3, Qt::AlignRight|Qt::AlignTop);
-    fgLayout->addWidget(entryStats,1,2,3,3, Qt::AlignRight|Qt::AlignTop);
+    //fgLayout->addWidget(entryStats,1,2,3,3, Qt::AlignRight|Qt::AlignTop);
     fgLayout->addWidget(entryErrors,1,2,3,3, Qt::AlignRight|Qt::AlignTop);
     fgLayout->addWidget(entryStatus,1,2,3,3, Qt::AlignRight|Qt::AlignTop);
     fgLayout->addWidget(entrySerialLog,1,2,3,3, Qt::AlignRight|Qt::AlignTop);
 
     entries[0] = entryTemp;
     entries[1] = entryStatus;
-    entries[2] = entryStats;
-    entries[3] = entrySerialLog;
-    entries[4] = entryErrors;
-    entries[5] = entryMotor;
+    //entries[2] = entryStats;
+    entries[2] = entrySerialLog;
+    entries[3] = entryErrors;
+    entries[4] = entryMotor;
 
+    // Set menus retain policy so that it keeps its area reserved even when not visible
     QSizePolicy temp = menu->sizePolicy();
     temp.setRetainSizeWhenHidden(true);
     menu->setSizePolicy(temp);
@@ -159,7 +163,7 @@ void MainWindow::motorShut(bool state)
         Notice::showText("Motor power is now on");
         entryMotor->setText("Power Off\nMotor");
     }
-    entryMotor->success();
+    entryMotor->success(state);
 }
 
 void MainWindow::clearClosingEntry()

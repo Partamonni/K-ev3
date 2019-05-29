@@ -9,6 +9,10 @@
 #include <QPropertyAnimation>
 #include <QTimer>
 
+/* Animated superclass to provide common functionality for all the entries.
+ * Provides basically as itself a working template to which add information.
+*/
+
 class MainWindow;
 
 class Entry : public QLabel
@@ -34,7 +38,18 @@ protected:
     QPropertyAnimation *motEffEntry = new QPropertyAnimation(this, "pos");
     MainWindow *m_parent = nullptr;
 
-    bool hidePrevious = true;
+    /* Basic structure of an entry is described below:
+     *
+     *  this (contains background and during animations the rendered image of a last state)
+     *  |
+     *  bgLayout
+     *  |
+     *  entryFrame (this is widget that is toggles off during animations to improve performance)
+     *  |
+     *  entryLayout (this is where the entry content is placed)
+     */
+
+    bool hidePrevious = true; // Only entry to use this is motor power toggle, that doesn't open a visual entry.
 
 private:
     int entWidth = 0;
