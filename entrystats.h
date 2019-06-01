@@ -4,6 +4,9 @@
 #include "entry.h"
 #include <QPlainTextEdit>
 
+/* Text entry, to be ditched? Competes unnecessarily with entryStatus
+ */
+
 class MainWindow;
 
 class EntryStats : public Entry

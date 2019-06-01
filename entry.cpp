@@ -8,7 +8,7 @@ Entry::Entry(MainWindow *parent)
     m_parent = parent;
     entWidth = SCR_WIDTH*3/4;
 
-    entryRender = new QPixmap(this->size());
+    entryRender = new QPixmap(this->size()); // Initialize pixmap size
 
     this->setLayout(bgLayout);
     bgLayout->setContentsMargins(0,0,0,0);
@@ -20,6 +20,7 @@ Entry::Entry(MainWindow *parent)
     this->setStyleSheet("QLabel {color: white;}");
     this->setFixedSize(entWidth, SCR_HEIGHT);
 
+    // Load and scale bg image
     entryBg->load(":/entrybg");
     *entryBg = entryBg->scaled(this->size(),
                         Qt::IgnoreAspectRatio,
@@ -36,6 +37,21 @@ Entry::Entry(MainWindow *parent)
 
     connect(motEffEntry, &QPropertyAnimation::finished, this, &Entry::hideEntry);
 }
+
+/* With animations, widget is first rendered to a pixmap.
+ * The frame holding the content is then hidden and the rendered picture
+ * is displayed in base widgets background. This widget is then animated.
+ *
+ * After animation, normal background is returned and content frame shown again.
+ *
+ * This improves performance because already jittering position animations
+ * jitters even more when widget has layouts with other widgets in it.
+ * Also, leaving content in place shows a brief flicker of content before hiding
+ * after the animation, so this gets rid of that too.
+ *
+ * More elegant solution would have been QML animations, which use openGL rendering
+ * instead of native windowing system API, but for this application this suffices.
+ */
 
 void Entry::toggleEntry()
 {

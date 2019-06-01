@@ -6,9 +6,9 @@
 
 EntryTemp::EntryTemp(MainWindow *parent)
 {
-    int columns = 4;
-    int initCount = 40;
+    int initCount = PACK_COUNT;
 
+    // Initialize all those temperature labels
     for (int i = 0; i < initCount; ++i)
     {
         packTemp[i] = new QLabel;
@@ -18,26 +18,24 @@ EntryTemp::EntryTemp(MainWindow *parent)
 
     grid->setContentsMargins(15,20,15,20);
 
+    // Get row count with given column count
+    int columns = 4;
     int rows;
-    do
-    {
-        double a = initCount;
-        double b = columns;
-        double rowsTmp = a/b;
-        rows = static_cast<int>(ceil(rowsTmp));
-    }
-    while(false);
+    double a = initCount;
+    double b = columns;
+    double rowsTmp = a/b;
+    rows = static_cast<int>(ceil(rowsTmp));
 
+    // Insert all those labels in a grid
+    int col = 0;
     for(int i = 0; i < initCount; ++i)
     {
-        static int col = 0;
-
         if (i % rows == 0 && i != 0)
             ++col;
 
-        grid->addWidget(packTemp[i],i-(col*rows),col,Qt::AlignCenter);
+        grid->addWidget(packTemp[i], i - (col * rows), col, Qt::AlignCenter);
         packTemp[i]->setText((QString("N/A'C")));
-        packTemp[i]->setFixedWidth(this->width()/columns-20);
+        packTemp[i]->setFixedWidth(this->width() / columns - 20);
         packTemp[i]->setAlignment(Qt::AlignCenter);
     }
 }

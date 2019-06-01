@@ -1,11 +1,9 @@
 #include "notice.h"
 
-
-
 Notice::Notice(MainWindow *parent)
 {
     m_parent = parent;
-    noticeObject = this;
+    noticeObject = this; // Mark this object to be the object to receive all notices
     initFont();
 
     this->setFixedSize(400,180);
@@ -32,6 +30,7 @@ Notice::Notice(MainWindow *parent)
 
     connect(hideTimer, SIGNAL(timeout()), opacityAnim, SLOT(start()));
     connect(opacityAnim, SIGNAL(finished()), this, SLOT(hide()));
+    // After hideTimer fires and fade out effect finishes, hide the notification
 }
 
 void Notice::initFont()
@@ -55,4 +54,5 @@ void Notice::toVisible()
     this->show();
     this->raise();
     hideTimer->start(2000);
+    // Launch a timer that starts fade out effect.
 }

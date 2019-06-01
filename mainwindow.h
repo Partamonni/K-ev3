@@ -1,6 +1,10 @@
 #ifndef MAINWINDOW_H
 #define MAINWINDOW_H
 
+/* Main class, handles QUI work.
+ * Keyboard and mouse buttons when debugging in windows environment.
+ */
+
 #include <QMainWindow>
 #include <QMenuBar>
 #include <QLabel>
@@ -18,7 +22,7 @@
 #include "entryerrors.h"
 #include "entrymotor.h"
 #include "entryseriallog.h"
-#include "entrystats.h"
+//#include "entrystats.h"
 #include "entrystatus.h"
 #include "entrytemp.h"
 #include "clock.h"
@@ -26,7 +30,9 @@
 
 extern int SCR_WIDTH;
 extern int SCR_HEIGHT;
-extern PushButtons *isrObject;
+#if RPI
+extern PushButtons *isrObject; // This is used to pass forward the pointer to the static splash notice method
+#endif
 
 class MainWindow : public QMainWindow
 {
@@ -73,7 +79,7 @@ private:
     Entry *closingEntry = nullptr;
     EntryTemp *entryTemp = new EntryTemp(this);
     EntryStatus *entryStatus= new EntryStatus(this);
-    EntryStats *entryStats= new EntryStats(this);
+    //EntryStats *entryStats= new EntryStats(this);
     EntrySerialLog *entrySerialLog = new EntrySerialLog(this);
     EntryErrors *entryErrors = new EntryErrors(this);
     EntryMotor *entryMotor= new EntryMotor(this);

@@ -4,6 +4,11 @@
 #include "entry.h"
 #include "serial.h"
 
+/* Sends serial message to start/continue operation, as in powering the motor on, if possible.
+ * Doesn't open visual entry and doesn't thus block other entries.
+ * Needs to be provided a Serial class that has Serial::writeSerial() function.
+ */
+
 class MainWindow;
 
 class EntryMotor : public Entry
@@ -15,7 +20,7 @@ public:
 
     void toggleEntry();
     void setSerial(Serial *serialObject);
-    void success();
+    void success(bool isShut);
 
 public slots:
     void alertFailure();
@@ -24,9 +29,10 @@ signals:
 
 private:
     bool powerEnabled = false;
-    bool stateChangeSuccess = false;
     int retries = 0;
     Serial *serial = nullptr;
+
+friend Serial;
 };
 
 #endif // ENTRYMOTOR_H

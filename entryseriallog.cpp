@@ -9,6 +9,7 @@ EntrySerialLog::EntrySerialLog(MainWindow *parent)
     entryLayout->setMargin(15);
     entryLayout->setSpacing(5);
 
+    // These hoops are needed to get the QPlainTextEdit widget background black
     QPalette p = col0->palette();
     p.setColor(QPalette::Active, QPalette::Base, Qt::black);
     col0->setPalette(p);
@@ -16,17 +17,22 @@ EntrySerialLog::EntrySerialLog(MainWindow *parent)
     col0->setStyleSheet(
                 "QPlainTextEdit{border-style: none;\
                                 color: white;}");
+    // Same settings for second column
     col1->setPalette(p);
     col1->setBackgroundVisible(false);
     col1->setStyleSheet(col0->styleSheet());
 
-    col0->setMaximumBlockCount(35);
-    col1->setMaximumBlockCount(35);
+    // Defines how many lines are shown at once
+    int lineCount = 35;
+    col0->setMaximumBlockCount(lineCount);
+    col1->setMaximumBlockCount(lineCount);
+
     col0->setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
     col1->setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
-
-
 }
+
+// This function handles inserting lines to column 0 and
+// moving them from column 0 to 1 when column 0 fills up.
 
 void EntrySerialLog::addLine(QString line)
 {
