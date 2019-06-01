@@ -1,0 +1,31 @@
+/etc/lightdm/lightdm.conf
+	xserver-command=X -nocursor -s 0 -dpms
+	
+/etc/xdg/lxsession/LXDE-pi/autostart
+	#@lxpanel --profile LXDE-pi
+	#@pcmanfm --desktop --profile LXDE-pi
+	#@xscreensaver -no-splash
+	#point-rpi
+	@sudo /home/pi/start
+
+/boot/config.txt
+	dtoverlay=pi3-disable-bt
+	enable_uart=1
+	start_x=0
+	gpu_mem=256
+
+	hdmi_force_hotplug=1
+	hdmi_cvt=800 480 60 6 0 0 0
+	hdmi_group=2
+	hdmi_mode=87
+	hdmi_drive=1
+	display_rotate=2
+
+~/start
+	#! /bin/bash
+	while [ $(gpio read 0) -ne 0 ]
+	do
+	echo "gpio not ready..."
+	sleep 0.1
+	done
+	/home/pi/K-ev3/K-ev3
