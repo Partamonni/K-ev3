@@ -22,14 +22,16 @@ void EntryMotor::toggleEntry()
 {
     if(serial != nullptr)
     {
-        timer->start(100);
+        timer->start(waitForActionTime/10);
 
-        if(!powerEnabled)
+        if(!powerOn)
         {
+            powerWanted = true;
             serial->writeSerial("ok\n");
         }
         else
         {
+            powerWanted = false;
             serial->writeSerial("!S\n");
         }
     }
@@ -50,19 +52,26 @@ void EntryMotor::success(bool isShut)
 {
     timer->stop();
     retries = 0;
-    powerEnabled = !isShut;
 }
 
 void EntryMotor::alertFailure()
 {
     if(retries++ >= 10)
     {
-        if(!powerEnabled)
+        if(powerWanted)
+        {
+            powerOn = false;
             Notice::showText("Module didn\'t answer!\nPower up failed!");
+        }
         else
+        {
+            powerOn = true;
             Notice::showText("Module didn\'t answer!\nPower down failed!");
+        }
         timer->stop();
         retries = 0;
         EntryErrors::addLine("Power Module didn't answer in time!");
     }
 }
+
+bool EntryMotor::waitingAnswer() { return timer->isActive(); }
