@@ -20,7 +20,7 @@ public:
 
     void toggleEntry();
     void setSerial(Serial *serialObject);
-    void success(bool isShut);
+    void command(bool isShut);
 
 public slots:
     void alertFailure();
@@ -28,11 +28,14 @@ public slots:
 signals:
 
 private:
-    bool powerEnabled = false;
+    bool powerOn = false;
+    bool powerWanted = false;
+    const int waitForActionTime = 2000; //ms
     int retries = 0;
     Serial *serial = nullptr;
 
-friend Serial;
+    friend class Serial;
+    friend class MainWindow;
 };
 
 #endif // ENTRYMOTOR_H

@@ -30,7 +30,7 @@ bool Serial::openSerialPort()
 {
 #if RPI
     this->setPortName("ttyAMA0");
-    this->setBaudRate(QSerialPort::Baud9600);
+    this->setBaudRate(QSerialPort::Baud2400);
 #else
     this->setPortName("COM11");
     this->setBaudRate(QSerialPort::Baud57600);
@@ -72,27 +72,24 @@ void Serial::readSerial()
     // Copy data to a QString for easier handling
     inData->append(QString::fromUtf8(data));
 
-    while(inData->contains('\n') || inData->contains('\r'))
+    while(inData->contains('\n') )//|| inData->contains('\r'))
     {
         // Get the first line-ending character and its index
         int i;
-        if(inData->contains('\n'))
-        {
+        if(inData->contains('\r'))
             inData->remove('\r');
-            i = inData->indexOf('\n');
-        }
-        else
-            i = inData->indexOf('\r');
+
+        i = inData->indexOf('\n');
 
         /* Depending of the first character, do accordingly
+         * Syntax:
          * e = end of data (e~)
          * ? = host presence / continue operation query (?h)
          * ! = critical condition occurred (over[!C]urrent, over[!V]oltage, under[!v]oltage or high [!T]emperature)
          * u = power is on (up)
          * s = power is shut (sh)
-         * : = data point (Battery [c]urrent, battery [v]voltage, # battery unit cell number and its temperature)
+         * : = data point (Battery [c]urrent, battery [v]voltage, # battery unit cell number and its temperature ie. :0-00.0)
          */
-
 
         if(inData->at(0) == '!') // Handle critical errors immidiately if occurred
         {
@@ -109,7 +106,7 @@ void Serial::readSerial()
                 Notice::showText("Overvoltage detected!");
                 EntryErrors::addLine("Overvoltage detected!");
             }
-            else if(inData->at(1) == 'T' && !overT)
+            else if(inData->at(1) == 'T')
             {
                 overT = true;
                 Notice::showText("Overtemperature detected!");
@@ -125,15 +122,16 @@ void Serial::readSerial()
         else if(inData->at(0) == 'e' || inData->at(0) == '~')
         {
             // If end of data received, inform to be ready to receive another batch
-            writeSerial("ok\n");
-            m_parent->entrySerialLog->addLine("ok");
+            if(m_parent->entryMotor->powerWanted) // Only if we want power on;
+            {
+                writeSerial("ok\n");
+            }
         }
         else if(inData->at(0) == '?' && inData->at(1) == 'h')
         {
-            if(m_parent->entryMotor->powerEnabled) // Only if we want power on;
+            if(m_parent->entryMotor->powerWanted) // Only if we want power on;
             {
                 writeSerial("ok\n");
-                m_parent->entrySerialLog->addLine("ok");
             }
         }
         else if(inData->at(0) == 'u' && inData->at(1) == 'p')

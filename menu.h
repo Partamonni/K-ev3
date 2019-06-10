@@ -31,6 +31,7 @@ public slots:
     void toggleSelector();
     void openMenu();
     void closeMenu();
+    void setMotorText(QString text);
 
 signals:
     void menuClosing();
