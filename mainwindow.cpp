@@ -151,23 +151,20 @@ void MainWindow::toggleEntry()
     }
 }
 
-void MainWindow::motorShut(bool state)
+void MainWindow::motorShut(bool isShut)
 {
-    if(state == true && entryMotor->powerOn)
+    if(isShut && entryMotor->powerOn)
     {
         Notice::showText("Motor power is now off");
-        entryMotor->setText("Power On\nMotor");
-        entryMotor->powerOn = false;
+        menu->setMotorText("Power On\nMotor");
     }
-    else if(!entryMotor->powerOn)
+    else if(!isShut && !entryMotor->powerOn)
     {
         Notice::showText("Motor power is now on");
-        entryMotor->setText("Power Off\nMotor");
-        entryMotor->powerOn = true;
+        menu->setMotorText("Power Off\nMotor");
     }
 
-    if(entryMotor->waitingAnswer())
-        entryMotor->success(state);
+    entryMotor->command(isShut);
 }
 
 void MainWindow::clearClosingEntry()

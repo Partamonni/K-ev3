@@ -4,6 +4,7 @@
 #include <QPoint>
 #include <QPropertyAnimation>
 #include "mainwindow.h"
+#include "button.h"
 
 Menu::Menu(MainWindow *parent)
 {
@@ -127,4 +128,9 @@ bool Menu::isClosing()
 bool Menu::isOpen()
 {
     return menuOpen;
+}
+
+void Menu::setMotorText(QString text)
+{
+    btn5->setText(text);
 }

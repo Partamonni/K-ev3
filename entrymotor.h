@@ -20,8 +20,7 @@ public:
 
     void toggleEntry();
     void setSerial(Serial *serialObject);
-    void success(bool isShut);
-    bool waitingAnswer();
+    void command(bool isShut);
 
 public slots:
     void alertFailure();

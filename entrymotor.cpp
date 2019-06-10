@@ -48,10 +48,14 @@ void EntryMotor::setSerial(Serial *serialObject)
     serial = serialObject;
 }
 
-void EntryMotor::success(bool isShut)
+void EntryMotor::command(bool isShut)
 {
-    timer->stop();
-    retries = 0;
+    powerOn = !isShut;
+    if(powerWanted == powerOn)
+    {
+        timer->stop();
+        retries = 0;
+    }
 }
 
 void EntryMotor::alertFailure()
@@ -73,5 +77,3 @@ void EntryMotor::alertFailure()
         EntryErrors::addLine("Power Module didn't answer in time!");
     }
 }
-
-bool EntryMotor::waitingAnswer() { return timer->isActive(); }

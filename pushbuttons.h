@@ -41,7 +41,7 @@ private:
     bool lBouncing = false;
     bool rBouncing = false;
     bool lDown = false;
-    int debounceTime = 50; //ms
+    int debounceTime = 70; //ms
 
     QTimer *holdTimer = new QTimer(this);
     QTimer *timerL = new QTimer(this); // For debouncing

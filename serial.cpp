@@ -77,12 +77,9 @@ void Serial::readSerial()
         // Get the first line-ending character and its index
         int i;
         if(inData->contains('\r'))
-        {
             inData->remove('\r');
-            i = inData->indexOf('\n');
-        }
-        else
-            i = inData->indexOf('\n');
+
+        i = inData->indexOf('\n');
 
         /* Depending of the first character, do accordingly
          * Syntax:

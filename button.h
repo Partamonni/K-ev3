@@ -19,6 +19,8 @@ class Button : public QWidget
 public:
     Button(Menu *parent = nullptr, QString text = nullptr);
 
+    void setText(QString text);
+
 private:
     QPushButton *button = new QPushButton;
 };

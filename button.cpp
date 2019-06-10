@@ -19,3 +19,7 @@ Button::Button(Menu *parent, QString text)
     parent->addButton(button);
 }
 
+void Button::setText(QString text)
+{
+    button->setText(text);
+}
