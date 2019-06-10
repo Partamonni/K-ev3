@@ -3,5 +3,5 @@
 *.o
 *.user*
 *.user
-*.user
-*.8-pre1
+*.ttf
+wiringPi/
