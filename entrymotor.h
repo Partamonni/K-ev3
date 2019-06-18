@@ -23,7 +23,7 @@ public:
     void command(bool isShut);
 
 public slots:
-    void alertFailure();
+    void retry();
 
 signals:
 

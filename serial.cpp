@@ -72,14 +72,12 @@ void Serial::readSerial()
     // Copy data to a QString for easier handling
     inData->append(QString::fromUtf8(data));
 
-    while(inData->contains('\n') )//|| inData->contains('\r'))
+    while(inData->contains('\n'))
     {
-        // Get the first line-ending character and its index
-        int i;
         if(inData->contains('\r'))
             inData->remove('\r');
-
-        i = inData->indexOf('\n');
+        // Get the first line-ending character and its index
+        int i = inData->indexOf('\n');
 
         /* Depending of the first character, do accordingly
          * Syntax:
@@ -87,7 +85,7 @@ void Serial::readSerial()
          * ? = host presence / continue operation query (?h)
          * ! = critical condition occurred (over[!C]urrent, over[!V]oltage, under[!v]oltage or high [!T]emperature)
          * u = power is on (up)
-         * s = power is shut (sh)
+         * s = power is [sh]ut or [st]arted
          * : = data point (Battery [c]urrent, battery [v]voltage, # battery unit cell number and its temperature ie. :0-00.0)
          */
 
@@ -146,6 +144,9 @@ void Serial::readSerial()
         {
             emit motorShut(true);
         }
+        else if(inData->at(0) == 's' && inData->at(1) == 't')
+        {
+        }
         else if(inData->at(0) == ':')
         {
             if(inData->at(1) == 'c')
@@ -163,10 +164,7 @@ void Serial::readSerial()
                 QString entryNum = inData->mid(1,inData->indexOf('-')-1); // Get the 1 or 2 number index
                 dataEntry = entryNum.toInt(); // Change it to integer
                 QString dataValue = inData->mid(inData->indexOf('-')+1,i-inData->indexOf('-')-1); // Get the value
-                if(dataValue != "257.0") // Check if it's valid
-                    display(dataValue);
-                else
-                    display("CRC"); // Otherwise it's CRC error
+                display(dataValue);
             }
         }
         else
