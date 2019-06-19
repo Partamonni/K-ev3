@@ -15,24 +15,27 @@ EntryMotor::EntryMotor(MainWindow *parent)
     timer->setSingleShot(false);
     // Default timer for this entry is reused in serial send retry context
 
-    connect(timer, &QTimer::timeout, this, &EntryMotor::alertFailure);
+    connect(timer, &QTimer::timeout, this, &EntryMotor::retry);
 }
 
 void EntryMotor::toggleEntry()
 {
     if(serial != nullptr)
     {
-        timer->start(waitForActionTime/10);
+        if(!timer->isActive())
+        {
+            timer->start(waitForActionTime/10);
 
-        if(!powerOn)
-        {
-            powerWanted = true;
-            serial->writeSerial("ok\n");
-        }
-        else
-        {
-            powerWanted = false;
-            serial->writeSerial("!S\n");
+            if(!powerOn)
+            {
+                powerWanted = true;
+                serial->writeSerial("ok\n");
+            }
+            else
+            {
+                powerWanted = false;
+                serial->writeSerial("!S\n");
+            }
         }
     }
     else
@@ -58,13 +61,25 @@ void EntryMotor::command(bool isShut)
     }
 }
 
-void EntryMotor::alertFailure()
+void EntryMotor::retry()
 {
+    if(!powerOn)
+    {
+        powerWanted = true;
+        serial->writeSerial("ok\n");
+    }
+    else
+    {
+        powerWanted = false;
+        serial->writeSerial("!S\n");
+    }
+
     if(retries++ >= 10)
     {
         if(powerWanted)
         {
             powerOn = false;
+            powerWanted = false; // We don't want the motor suddenly coming alive
             Notice::showText("Module didn\'t answer!\nPower up failed!");
         }
         else
