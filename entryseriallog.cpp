@@ -23,7 +23,7 @@ EntrySerialLog::EntrySerialLog(MainWindow *parent)
     col1->setStyleSheet(col0->styleSheet());
 
     // Defines how many lines are shown at once
-    int lineCount = 35;
+    int lineCount = 32;
     col0->setMaximumBlockCount(lineCount);
     col1->setMaximumBlockCount(lineCount);
 
@@ -44,20 +44,19 @@ void EntrySerialLog::addLine(QString line)
 
     if(col0->blockCount() >= col0->maximumBlockCount())
     {
-        if(col1->blockCount() >= col1->maximumBlockCount()-1-1)
-        {
-            cursor1.movePosition(QTextCursor::End);
-            cursor1.select(QTextCursor::LineUnderCursor);
-            cursor1.removeSelectedText();
-            cursor1.deletePreviousChar();
-        }
-
         cursor0.movePosition(QTextCursor::End);
         cursor0.select(QTextCursor::LineUnderCursor);
         cursor1.setPosition(QTextCursor::Start-1);
         cursor1.insertText(cursor0.selectedText()+"\n");
         cursor0.removeSelectedText();
         cursor0.deletePreviousChar();
-    }
 
+        if(col1->blockCount() >= col1->maximumBlockCount())
+        {
+            cursor1.movePosition(QTextCursor::End);
+            cursor1.select(QTextCursor::LineUnderCursor);
+            cursor1.removeSelectedText();
+            cursor1.deletePreviousChar();
+        }
+    }
 }

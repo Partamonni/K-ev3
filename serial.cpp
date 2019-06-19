@@ -32,8 +32,8 @@ bool Serial::openSerialPort()
     this->setPortName("ttyAMA0");
     this->setBaudRate(QSerialPort::Baud2400);
 #else
-    this->setPortName("COM11");
-    this->setBaudRate(QSerialPort::Baud57600);
+    this->setPortName("COM3");
+    this->setBaudRate(QSerialPort::Baud2400);
 #endif
 
     this->setDataBits(QSerialPort::Data8);
@@ -91,7 +91,7 @@ void Serial::readSerial()
 
         if(inData->at(0) == '!') // Handle critical errors immidiately if occurred
         {
-            emit motorShut(true);
+            //emit motorShut(true);
             if(inData->at(1) == 'C' && !overC)
             {
                 overC = true;
